@@ -1,0 +1,7 @@
+﻿Octopus Deploy Command Line Tool, version 3.3.13-autochannel.17+Branch.feature-autochannel.Sha.7b9f6f75342d02463f6b6762268b4e18a71de965
+
+Handshaking with Octopus server: http://localhost:8065
+Handshake successful. Octopus version: 3.3.5-bug-pkgscriptvar0015; API version: 3.0.0
+Authenticated as: admin <> 
+Cannot specify --channel and --autochannel arguments
+Exit code: -1
