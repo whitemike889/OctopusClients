@@ -19,7 +19,7 @@ namespace Octopus.Client.Exceptions
         /// <param name="webException">The web exception.</param>
         /// <param name="response">The response.</param>
         /// <returns>A rich exception describing the problem.</returns>
-        public static OctopusException CreateException(WebException webException, HttpWebResponse response)
+        public static OctopusException CreateException<TResponseResource>(WebException webException, HttpWebResponse response)
         {
             var statusCode = (int)response.StatusCode;
 
@@ -32,7 +32,7 @@ namespace Octopus.Client.Exceptions
                     body = reader.ReadToEnd();
                 }
             }
-            return CreateException(statusCode, body);
+            return CreateException<TResponseResource>(statusCode, body);
         }
 #endif
 
@@ -41,21 +41,30 @@ namespace Octopus.Client.Exceptions
         /// </summary>
         /// <param name="response">The response.</param>
         /// <returns>A rich exception describing the problem.</returns>
-        public static async Task<OctopusException> CreateException(HttpResponseMessage response)
+        public static async Task<OctopusException> CreateException<TResponseResource>(HttpResponseMessage response)
         {
             var statusCode = (int)response.StatusCode;
 
             var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-            return CreateException(statusCode, body);
+            return CreateException<TResponseResource>(statusCode, body);
         }
 
-        static OctopusException CreateException(int statusCode, string body)
+        static OctopusException CreateException<TResponseResource>(int statusCode, string body)
         {
             if (statusCode == 400 || statusCode == 409) // Bad request: usually validation error 
             {
-                var errors = JsonConvert.DeserializeObject<OctopusErrorsContract>(body);
-                return new OctopusValidationException(statusCode, errors.ErrorMessage, errors.Errors) {HelpText = errors.HelpText};
+                try
+                {
+                    var errors = JsonConvert.DeserializeObject<OctopusErrorsContract>(body);
+                    return new OctopusValidationException(statusCode, errors.ErrorMessage, errors.Errors) { HelpText = errors.HelpText };
+                }
+                // Unfortunately there is no TryDeserializeObject method
+                catch (JsonSerializationException)
+                {
+                    var structuredData = JsonConvert.DeserializeObject<TResponseResource>(body);
+                    return new OctopusValidationException<TResponseResource>(statusCode, structuredData);
+                }
             }
 
             if (statusCode == 401 || statusCode == 403) // Forbidden, usually no API key or permissions

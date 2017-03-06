@@ -5,6 +5,22 @@ using System.Linq;
 
 namespace Octopus.Client.Exceptions
 {
+    public class OctopusValidationException<TDetails> : OctopusValidationException
+    {
+        public OctopusValidationException(TDetails details) : base("Request failed. Please check Details property.", new [] {"Request failed.Please check Details property."})
+        {
+            Details = details;
+        }
+
+        public OctopusValidationException(int httpStatusCode, TDetails details) : base(httpStatusCode, "Request failed. Please check Details property.", new[] { "Request failed.Please check Details property." })
+        {
+            Details = Details;
+        }
+
+        public TDetails Details { get; set; }
+    }
+
+
     /// <summary>
     /// An exception thrown when there was a problem with the request (usually a HTTP 400). 
     /// </summary>

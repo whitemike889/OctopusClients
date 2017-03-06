@@ -542,7 +542,7 @@ Certificate thumbprint:   {certificate.Thumbprint}";
                     using (var response = await client.SendAsync(message, completionOption).ConfigureAwait(false))
                     {
                         if (!response.IsSuccessStatusCode)
-                            throw await OctopusExceptionFactory.CreateException(response).ConfigureAwait(false);
+                            throw await OctopusExceptionFactory.CreateException<TResponseResource>(response).ConfigureAwait(false);
 
                         var resource = readResponse
                             ? await ReadResponse<TResponseResource>(response).ConfigureAwait(false)

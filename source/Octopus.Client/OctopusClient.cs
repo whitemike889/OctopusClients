@@ -579,7 +579,7 @@ namespace Octopus.Client
             {
                 if (wex.Response != null)
                 {
-                    throw OctopusExceptionFactory.CreateException(wex, (HttpWebResponse)wex.Response);
+                    throw OctopusExceptionFactory.CreateException<TResponseResource>(wex, (HttpWebResponse)wex.Response);
                 }
 
                 throw;
