@@ -1285,6 +1285,10 @@ Octopus.Client.Model
     {
       static System.String Name
     }
+    abstract class Subscription
+    {
+      static System.String Name
+    }
     abstract class SyncCommunityActionTemplates
     {
       static System.String Name
@@ -1797,8 +1801,10 @@ Octopus.Client.Model
     String EmailShowDatesInTimeZoneId { get; set; }
     Octopus.Client.Model.ReferenceCollection EmailTeams { get; set; }
     Octopus.Client.Model.EventNotificationSubscriptionFilter Filter { get; set; }
+    Nullable<TimeSpan> WebhookFrequencyPeriod { get; set; }
     Nullable<DateTimeOffset> WebhookLastProcessed { get; set; }
     Nullable<Int64> WebhookLastProcessedEventAutoId { get; set; }
+    Nullable<SubscriptionWebhookPayloadType> WebhookPayloadType { get; set; }
     Octopus.Client.Model.ReferenceCollection WebhookTeams { get; set; }
     String WebhookURI { get; set; }
   }
@@ -2978,6 +2984,10 @@ Octopus.Client.Model
     static System.String LightYellow
     .ctor()
   }
+  abstract class Subscription
+  {
+    static System.String Name
+  }
   class SubscriptionResource
     Octopus.Client.Model.IResource
     Octopus.Client.Model.IAuditedResource
@@ -2992,6 +3002,11 @@ Octopus.Client.Model
   SubscriptionType
   {
       Event = 0
+  }
+  SubscriptionWebhookPayloadType
+  {
+      Single = 0
+      Digest = 1
   }
   class SupportsRestrictionAttribute
     _Attribute
