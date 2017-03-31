@@ -69,6 +69,11 @@ namespace Octopus.Client.Model
             public const string Name = "Retention";
         }
 
+        public static class Subscription
+        {
+            public const string Name = "Subscription";
+        }
+
         public static class Upgrade
         {
             public const string Name = "Upgrade";

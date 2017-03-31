@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 namespace Octopus.Client.Model
 {
+    public enum SubscriptionWebhookPayloadType
+    {
+        Single,
+        Digest,
+    }
+
     public class EventNotificationSubscription
     {
         public EventNotificationSubscription()
@@ -14,7 +20,7 @@ namespace Octopus.Client.Model
 
         public EventNotificationSubscriptionFilter Filter { get; set; }
 
-
+        #region Email
         public ReferenceCollection EmailTeams { get; set; }
 
         public TimeSpan EmailFrequencyPeriod { get; set; }
@@ -24,8 +30,9 @@ namespace Octopus.Client.Model
         public long? EmailDigestLastProcessedEventAutoId { get; set; }
 
         public string EmailShowDatesInTimeZoneId { get; set; }
+        #endregion
 
-
+        #region Webhooks
         public string WebhookURI { get; set; }
 
         public ReferenceCollection WebhookTeams { get; set; }
@@ -33,6 +40,11 @@ namespace Octopus.Client.Model
         public DateTimeOffset? WebhookLastProcessed { get; set; }
 
         public long? WebhookLastProcessedEventAutoId { get; set; }
+
+        public SubscriptionWebhookPayloadType? WebhookPayloadType { get; set; }
+
+        public TimeSpan? WebhookFrequencyPeriod { get; set; }
+        #endregion
     }
 
     public class EventNotificationSubscriptionFilter
