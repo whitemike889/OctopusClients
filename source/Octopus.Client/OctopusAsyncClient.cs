@@ -14,6 +14,7 @@ using System.Net.Http.Headers;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Octopus.Client.Extensions;
 using Octopus.Client.Logging;
 using Octopus.Client.Util;
 
@@ -33,7 +34,6 @@ namespace Octopus.Client
         private readonly Uri cookieOriginUri;
         private readonly bool ignoreSslErrors = false;
         bool ignoreSslErrorMessageLogged = false;
-
 
         protected OctopusAsyncClient(OctopusServerEndpoint serverEndpoint, OctopusClientOptions options, bool addCertificateCallback)
         {
@@ -70,6 +70,7 @@ namespace Octopus.Client
             client.Timeout = options.Timeout;
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add(ApiConstants.ApiKeyHttpHeaderName, serverEndpoint.ApiKey);
+            client.DefaultRequestHeaders.Add("User-Agent", $"{ApiConstants.OctopusUserAgentProductName}/{GetType().GetSemanticVersion().ToNormalizedString()}");
         }
 
         private Uri BuildCookieUri(OctopusServerEndpoint octopusServerEndpoint)
@@ -163,6 +164,11 @@ Certificate thumbprint:   {certificate.Thumbprint}";
         /// Occurs when a request is about to be sent.
         /// </summary>
         public event Action<HttpRequestMessage> BeforeSendingHttpRequest;
+
+        /// <summary>
+        /// Occurs when a response has been received.
+        /// </summary>
+        public event Action<HttpResponseMessage> AfterReceivedHttpResponse;
 
         /// <summary>
         /// Occurs when a request is about to be sent.
@@ -526,15 +532,13 @@ Certificate thumbprint:   {certificate.Thumbprint}";
                     }
                 }
 
-                var requestHandler = SendingOctopusRequest;
-                requestHandler?.Invoke(request);
+                SendingOctopusRequest?.Invoke(request);
 
-                var webRequestHandler = BeforeSendingHttpRequest;
-                webRequestHandler?.Invoke(message);
+                BeforeSendingHttpRequest?.Invoke(message);
 
                 if (request.RequestResource != null)
                     message.Content = GetContent(request);
-                
+
                 var completionOption = readResponse
                     ? HttpCompletionOption.ResponseContentRead
                     : HttpCompletionOption.ResponseHeadersRead;
@@ -542,6 +546,8 @@ Certificate thumbprint:   {certificate.Thumbprint}";
                 {
                     using (var response = await client.SendAsync(message, completionOption).ConfigureAwait(false))
                     {
+                        AfterReceivedHttpResponse?.Invoke(response);
+
                         if (!response.IsSuccessStatusCode)
                             throw await OctopusExceptionFactory.CreateException(response).ConfigureAwait(false);
 

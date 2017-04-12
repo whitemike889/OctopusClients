@@ -12,6 +12,7 @@ using Octopus.Client.Model;
 using Octopus.Client.Serialization;
 using System.Collections.Generic;
 using System.Linq;
+using Octopus.Client.Extensions;
 
 namespace Octopus.Client
 {
@@ -26,6 +27,7 @@ namespace Octopus.Client
         readonly CookieContainer cookieContainer = new CookieContainer();
         readonly Uri cookieOriginUri;
         readonly JsonSerializerSettings defaultJsonSerializerSettings = JsonSerialization.GetDefaultSerializerSettings();
+        private readonly SemanticVersion clientVersion;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OctopusClient" /> class.
@@ -35,6 +37,7 @@ namespace Octopus.Client
         {
             this.serverEndpoint = serverEndpoint;
             cookieOriginUri = BuildCookieUri(serverEndpoint);
+            clientVersion = GetType().GetSemanticVersion();
         }
 
         /// <summary>
@@ -80,6 +83,11 @@ namespace Octopus.Client
         /// Occurs when a request is about to be sent.
         /// </summary>
         public event Action<WebRequest> BeforeSendingHttpRequest;
+
+        /// <summary>
+        /// Occurs when a response has been received.
+        /// </summary>
+        public event Action<WebResponse> AfterReceivingHttpResponse;
 
         /// <summary>
         /// Occurs when a request is about to be sent.
@@ -446,6 +454,7 @@ namespace Octopus.Client
             webRequest.Credentials = serverEndpoint.Credentials ?? CredentialCache.DefaultNetworkCredentials;
             webRequest.Method = request.Method;
             webRequest.Headers[ApiConstants.ApiKeyHttpHeaderName] = serverEndpoint.ApiKey;
+            webRequest.UserAgent = $"{ApiConstants.OctopusUserAgentProductName}/{clientVersion.ToNormalizedString()}";
             
             if (webRequest.Method == "PUT")
             {
@@ -471,13 +480,12 @@ namespace Octopus.Client
                 }
             }
 
-            var requestHandler = SendingOctopusRequest;
-            requestHandler?.Invoke(request);
+            SendingOctopusRequest?.Invoke(request);
 
-            var webRequestHandler = BeforeSendingHttpRequest;
-            webRequestHandler?.Invoke(webRequest);
+            BeforeSendingHttpRequest?.Invoke(webRequest);
 
             HttpWebResponse webResponse = null;
+
             try
             {
                 if (request.RequestResource == null) {
@@ -528,6 +536,7 @@ namespace Octopus.Client
                 }
 
                 webResponse = (HttpWebResponse)webRequest.GetResponse();
+                AfterReceivingHttpResponse?.Invoke(webResponse);
 
                 var resource = default(TResponseResource);
                 if (readResponse)

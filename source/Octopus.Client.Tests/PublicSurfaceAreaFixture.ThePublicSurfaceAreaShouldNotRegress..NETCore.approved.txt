@@ -14,6 +14,7 @@ Octopus.Client
   interface IOctopusAsyncClient
     IDisposable
   {
+    event Action<HttpResponseMessage> AfterReceivedHttpResponse
     event Action<HttpRequestMessage> BeforeSendingHttpRequest
     event Action<OctopusResponse> ReceivedOctopusResponse
     event Action<OctopusRequest> SendingOctopusRequest
@@ -90,6 +91,7 @@ Octopus.Client
     Octopus.Client.IOctopusAsyncClient
     IDisposable
   {
+    event Action<HttpResponseMessage> AfterReceivedHttpResponse
     event Action<HttpRequestMessage> BeforeSendingHttpRequest
     event Action<OctopusResponse> ReceivedOctopusResponse
     event Action<OctopusRequest> SendingOctopusRequest
@@ -464,6 +466,7 @@ Octopus.Client.Exceptions
   class OctopusErrorsContract
   {
     .ctor()
+    Object Details { get; set; }
     String ErrorMessage { get; set; }
     String[] Errors { get; set; }
     String FullException { get; set; }
@@ -481,6 +484,7 @@ Octopus.Client.Exceptions
     class OctopusErrorsContract
     {
       .ctor()
+      Object Details { get; set; }
       String ErrorMessage { get; set; }
       String[] Errors { get; set; }
       String FullException { get; set; }
@@ -512,8 +516,11 @@ Octopus.Client.Exceptions
   {
     .ctor(String, ICollection<String>)
     .ctor(Int32, String, ICollection<String>)
+    .ctor(Int32, String, ICollection<String>, Object)
+    Object Details { get; }
     String ErrorMessage { get; }
     ReadOnlyCollection<String> Errors { get; }
+    Octopus.Client.Exceptions.TDetails DetailsAs()
   }
   class UnsupportedApiVersionException
     _Exception
@@ -574,6 +581,16 @@ Octopus.Client.Logging
 }
 Octopus.Client.Model
 {
+  class ActionsUpdateResource
+    Octopus.Client.Model.IResource
+  {
+    .ctor()
+    IDictionary<String, String[]> ActionIdsByProcessId { get; set; }
+    IDictionary<String, PropertyValueResource> DefaultPropertyValues { get; set; }
+    String Id { get; set; }
+    Octopus.Client.Model.LinkCollection Links { get; set; }
+    Int32 Version { get; set; }
+  }
   class ActionTemplateParameterResource
   {
     .ctor()
@@ -629,6 +646,22 @@ Octopus.Client.Model
     String StepId { get; set; }
     String StepName { get; set; }
     String Version { get; set; }
+  }
+  ActionUpdateOutcome
+  {
+      Success = 0
+      ManualMergeRequired = 1
+      DefaultParamterValueMissing = 2
+  }
+  class ActionUpdateResultResource
+    Octopus.Client.Model.IResource
+  {
+    .ctor()
+    String Id { get; set; }
+    Octopus.Client.Model.LinkCollection Links { get; set; }
+    IDictionary<String, String[]> ManualMergeRequiredReasonsByPropertyName { get; set; }
+    String[] NamesOfNewParametersMissingDefaultValue { get; set; }
+    Octopus.Client.Model.ActionUpdateOutcome Outcome { get; set; }
   }
   class ActivityElement
   {
@@ -700,6 +733,7 @@ Octopus.Client.Model
     static System.String ApiKeyHttpHeaderName
     static System.String AuthenticationCookiePrefix
     static System.Int32 DefaultClientRequestTimeout
+    static System.String OctopusUserAgentProductName
     static System.String SupportedApiSchemaVersionMax
     static System.String SupportedApiSchemaVersionMin
     .ctor()
@@ -1471,6 +1505,7 @@ Octopus.Client.Model
     Octopus.Client.Model.IAuditedResource
   {
     .ctor()
+    Boolean IsBrowserCachingEnabled { get; set; }
     Boolean IsCommunityActionTemplatesEnabled { get; set; }
     Boolean IsDockerEnabled { get; set; }
     Boolean IsMultiTenancyEnabled { get; set; }
@@ -2133,6 +2168,7 @@ Octopus.Client.Model
     Boolean DefaultToSkipIfAlreadyInstalled { get; set; }
     String DeploymentProcessId { get; set; }
     String Description { get; set; }
+    Boolean DiscreteChannelRelease { get; set; }
     List<String> IncludedLibraryVariableSetIds { get; set; }
     Boolean IsDisabled { get; set; }
     String LifecycleId { get; set; }
@@ -2743,6 +2779,7 @@ Octopus.Client.Model
     Octopus.Client.Model.NamedReferenceItemCollection ExternalSecurityGroups { get; set; }
     Octopus.Client.Model.ReferenceCollection MemberUserIds { get; set; }
     String Name { get; set; }
+    Octopus.Client.Model.ReferenceCollection ProjectGroupIds { get; set; }
     Octopus.Client.Model.ReferenceCollection ProjectIds { get; set; }
     Octopus.Client.Model.ReferenceCollection TenantIds { get; set; }
     Octopus.Client.Model.ReferenceCollection TenantTags { get; set; }
@@ -2857,6 +2894,7 @@ Octopus.Client.Model
   {
     .ctor()
     Octopus.Client.Model.ReferenceCollection RestrictedToEnvironmentIds { get; set; }
+    Octopus.Client.Model.ReferenceCollection RestrictedToProjectGroupIds { get; set; }
     Octopus.Client.Model.ReferenceCollection RestrictedToProjectIds { get; set; }
     Octopus.Client.Model.ReferenceCollection RestrictedToTenantIds { get; set; }
     static IEqualityComparer<UserPermissionRestriction> UserPermissionRestrictionComparer { get; }
@@ -3459,7 +3497,9 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IPaginate<ActionTemplateResource>
     Octopus.Client.Repositories.Async.IGetAll<ActionTemplateResource>
   {
+    Task<ActionTemplateResource> GetVersion(Octopus.Client.Model.ActionTemplateResource, Int32)
     Task<List<ActionTemplateSearchResource>> Search()
+    Task<ActionUpdateResultResource[]> UpdateActions(Octopus.Client.Model.ActionTemplateResource, Octopus.Client.Model.ActionsUpdateResource)
   }
   interface IArtifactRepository
     Octopus.Client.Repositories.Async.IPaginate<ArtifactResource>
