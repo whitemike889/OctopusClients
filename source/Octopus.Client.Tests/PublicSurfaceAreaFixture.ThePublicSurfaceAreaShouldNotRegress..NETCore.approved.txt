@@ -3372,7 +3372,8 @@ Octopus.Client.Model.Migrations
     Boolean IncludeTenants { get; set; }
     Boolean IncludeUserRoles { get; set; }
     Boolean IncludeUsers { get; set; }
-    String PackageIdentifier { get; set; }
+    String PackageId { get; set; }
+    String PackageVersion { get; set; }
     String Password { get; set; }
     List<String> Projects { get; set; }
     String SuccessCallbackUri { get; set; }

@@ -5,7 +5,9 @@ namespace Octopus.Client.Model.Migrations
     public class SpacePartialExportResource : Resource
     {
         [Writeable]
-        public string PackageIdentifier { get; set; }
+        public string PackageId { get; set; }
+        [Writeable]
+        public string PackageVersion { get; set; }
         [Writeable]
         public string Password { get; set; }
         [Writeable]
