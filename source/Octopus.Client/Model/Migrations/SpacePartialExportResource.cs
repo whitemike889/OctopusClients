@@ -26,8 +26,6 @@ namespace Octopus.Client.Model.Migrations
         public string DestinationPackageFeed { get; set; }
         public string SuccessCallbackUri { get; set; }
         public string FailureCallbackUri { get; set; }
-
-        [Writeable]
         public string TaskId { get; set; }
     }
 }

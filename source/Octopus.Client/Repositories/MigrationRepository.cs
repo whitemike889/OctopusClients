@@ -19,12 +19,12 @@ namespace Octopus.Client.Repositories
 
         public SpacePartialExportResource SpacePartialExport(SpacePartialExportResource resource)
         {
-            return client.Create(client.RootDocument.Link("MigrationsSpacePartialExport"), resource);
+            return client.Post<SpacePartialExportResource, SpacePartialExportResource>(client.RootDocument.Link("MigrationsSpacePartialExport"), resource);
         }
 
         public SpaceImportResource SpaceImport(SpaceImportResource resource)
         {
-            return client.Create(client.RootDocument.Link("MigrationsSpaceImport"), resource);
+            return client.Post< SpaceImportResource, SpaceImportResource>(client.RootDocument.Link("MigrationsSpaceImport"), resource);
         }
     }
 }

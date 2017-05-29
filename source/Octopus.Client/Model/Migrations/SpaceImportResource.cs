@@ -10,8 +10,6 @@
         public bool OverwriteExisting { get; set; }
         public string SuccessCallbackUri { get; set; }
         public string FailureCallbackUri { get; set; }
-
-        [Writeable]
         public string TaskId { get; set; }
     }
 }
