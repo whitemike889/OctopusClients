@@ -65,6 +65,7 @@ Octopus.Client
     Octopus.Client.Repositories.Async.IMachinePolicyRepository MachinePolicies { get; }
     Octopus.Client.Repositories.Async.IMachineRoleRepository MachineRoles { get; }
     Octopus.Client.Repositories.Async.IMachineRepository Machines { get; }
+    Octopus.Client.Repositories.Async.IMigrationRepository Migrations { get; }
     Octopus.Client.Repositories.Async.IOctopusServerNodeRepository OctopusServerNodes { get; }
     Octopus.Client.Repositories.Async.IProjectGroupRepository ProjectGroups { get; }
     Octopus.Client.Repositories.Async.IProjectRepository Projects { get; }
@@ -146,6 +147,7 @@ Octopus.Client
     Octopus.Client.Repositories.Async.IMachinePolicyRepository MachinePolicies { get; }
     Octopus.Client.Repositories.Async.IMachineRoleRepository MachineRoles { get; }
     Octopus.Client.Repositories.Async.IMachineRepository Machines { get; }
+    Octopus.Client.Repositories.Async.IMigrationRepository Migrations { get; }
     Octopus.Client.Repositories.Async.IOctopusServerNodeRepository OctopusServerNodes { get; }
     Octopus.Client.Repositories.Async.IProjectGroupRepository ProjectGroups { get; }
     Octopus.Client.Repositories.Async.IProjectRepository Projects { get; }
@@ -3330,6 +3332,53 @@ Octopus.Client.Model.Forms
     Type GetNativeValueType()
   }
 }
+Octopus.Client.Model.Migrations
+{
+  class SpaceImportResource
+    Octopus.Client.Model.IResource
+    Octopus.Client.Model.IAuditedResource
+  {
+    .ctor()
+    String FailureCallbackUri { get; set; }
+    Boolean IsDryRun { get; set; }
+    Boolean IsEncryptedPackage { get; set; }
+    Boolean OverwriteExisting { get; set; }
+    String PackageId { get; set; }
+    String PackageVersion { get; set; }
+    String Password { get; set; }
+    String SuccessCallbackUri { get; set; }
+    String TaskId { get; set; }
+  }
+  class SpacePartialExportResource
+    Octopus.Client.Model.IResource
+    Octopus.Client.Model.IAuditedResource
+  {
+    .ctor()
+    String DestinationApiKey { get; set; }
+    String DestinationPackageFeed { get; set; }
+    Boolean EncryptPackage { get; set; }
+    String FailureCallbackUri { get; set; }
+    Boolean IncludeApiKeys { get; set; }
+    Boolean IncludeCertificateConfigurations { get; set; }
+    Boolean IncludeCertificates { get; set; }
+    Boolean IncludeEvents { get; set; }
+    Boolean IncludeLicense { get; set; }
+    Boolean IncludeMachines { get; set; }
+    Boolean IncludeReleases { get; set; }
+    Boolean IncludeSmtpConfiguration { get; set; }
+    Boolean IncludeSubscriptions { get; set; }
+    Boolean IncludeTaskLogs { get; set; }
+    Boolean IncludeTeams { get; set; }
+    Boolean IncludeTenants { get; set; }
+    Boolean IncludeUserRoles { get; set; }
+    Boolean IncludeUsers { get; set; }
+    String PackageIdentifier { get; set; }
+    String Password { get; set; }
+    List<String> Projects { get; set; }
+    String SuccessCallbackUri { get; set; }
+    String TaskId { get; set; }
+  }
+}
 Octopus.Client.Model.Triggers
 {
   class AutoDeployActionResource
@@ -3717,6 +3766,11 @@ Octopus.Client.Repositories.Async
   interface IMachineRoleRepository
   {
     Task<List<String>> GetAllRoleNames()
+  }
+  interface IMigrationRepository
+  {
+    Task<SpaceImportResource> SpaceImport(Octopus.Client.Model.Migrations.SpaceImportResource)
+    Task<SpacePartialExportResource> SpacePartialExport(Octopus.Client.Model.Migrations.SpacePartialExportResource)
   }
   interface IModify`1
   {
