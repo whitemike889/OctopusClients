@@ -20,12 +20,12 @@ namespace Octopus.Client.Repositories.Async
 
         public async Task<SpacePartialExportResource> SpacePartialExport(SpacePartialExportResource resource)
         {
-            return await client.Create(client.RootDocument.Link("MigrationsSpacePartialExport"), resource).ConfigureAwait(false);
+            return await client.Post<SpacePartialExportResource, SpacePartialExportResource>(client.RootDocument.Link("MigrationsSpacePartialExport"), resource).ConfigureAwait(false);
         }
 
         public async Task<SpaceImportResource> SpaceImport(SpaceImportResource resource)
         {
-            return await client.Create(client.RootDocument.Link("MigrationsSpaceImport"), resource).ConfigureAwait(false);
+            return await client.Post<SpaceImportResource, SpaceImportResource>(client.RootDocument.Link("MigrationsSpaceImport"), resource).ConfigureAwait(false);
         }
     }
 }
