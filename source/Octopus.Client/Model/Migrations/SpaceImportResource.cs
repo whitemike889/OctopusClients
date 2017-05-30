@@ -15,6 +15,8 @@
         [Writeable]
         public bool OverwriteExisting { get; set; }
         [Writeable]
+        public bool DeletePackageOnCompletion { get; set; }
+        [Writeable]
         public string SuccessCallbackUri { get; set; }
         [Writeable]
         public string FailureCallbackUri { get; set; }

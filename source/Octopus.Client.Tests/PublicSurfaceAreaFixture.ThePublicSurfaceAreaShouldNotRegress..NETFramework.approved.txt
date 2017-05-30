@@ -3742,6 +3742,7 @@ Octopus.Client.Model.Migrations
     Octopus.Client.Model.IAuditedResource
   {
     .ctor()
+    Boolean DeletePackageOnCompletion { get; set; }
     String FailureCallbackUri { get; set; }
     Boolean IsDryRun { get; set; }
     Boolean IsEncryptedPackage { get; set; }
