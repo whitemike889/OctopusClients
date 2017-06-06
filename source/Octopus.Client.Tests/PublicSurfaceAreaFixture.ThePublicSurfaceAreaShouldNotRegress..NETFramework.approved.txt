@@ -3762,20 +3762,11 @@ Octopus.Client.Model.Migrations
     String DestinationPackageFeed { get; set; }
     Boolean EncryptPackage { get; set; }
     String FailureCallbackUri { get; set; }
-    Boolean IncludeApiKeys { get; set; }
-    Boolean IncludeCertificateConfigurations { get; set; }
-    Boolean IncludeCertificates { get; set; }
-    Boolean IncludeEvents { get; set; }
-    Boolean IncludeLicense { get; set; }
-    Boolean IncludeMachines { get; set; }
-    Boolean IncludeReleases { get; set; }
-    Boolean IncludeSmtpConfiguration { get; set; }
-    Boolean IncludeSubscriptions { get; set; }
+    Boolean IgnoreCertificates { get; set; }
+    Boolean IgnoreMachines { get; set; }
+    Boolean IgnoreReleases { get; set; }
+    Boolean IgnoreTenants { get; set; }
     Boolean IncludeTaskLogs { get; set; }
-    Boolean IncludeTeams { get; set; }
-    Boolean IncludeTenants { get; set; }
-    Boolean IncludeUserRoles { get; set; }
-    Boolean IncludeUsers { get; set; }
     String PackageId { get; set; }
     String PackageVersion { get; set; }
     String Password { get; set; }
