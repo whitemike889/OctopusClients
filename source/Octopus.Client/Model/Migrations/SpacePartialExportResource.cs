@@ -17,7 +17,7 @@ namespace Octopus.Client.Model.Migrations
         [Writeable]
         public bool IgnoreMachines { get; set; }
         [Writeable]
-        public bool IgnoreReleases { get; set; }
+        public bool IgnoreDeployments { get; set; }
         [Writeable]
         public bool IgnoreTenants { get; set; }
         [Writeable]
