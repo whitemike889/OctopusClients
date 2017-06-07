@@ -3763,8 +3763,8 @@ Octopus.Client.Model.Migrations
     Boolean EncryptPackage { get; set; }
     String FailureCallbackUri { get; set; }
     Boolean IgnoreCertificates { get; set; }
-    Boolean IgnoreMachines { get; set; }
     Boolean IgnoreDeployments { get; set; }
+    Boolean IgnoreMachines { get; set; }
     Boolean IgnoreTenants { get; set; }
     Boolean IncludeTaskLogs { get; set; }
     String PackageId { get; set; }
