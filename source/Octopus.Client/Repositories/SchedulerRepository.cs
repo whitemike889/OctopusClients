@@ -10,7 +10,7 @@ namespace Octopus.Client.Repositories
         void Stop(string taskName);
         void Trigger(string taskName);
     }
-    
+
     class SchedulerRepository : ISchedulerRepository
     {
         readonly IOctopusClient client;

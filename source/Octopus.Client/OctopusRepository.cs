@@ -29,6 +29,7 @@ namespace Octopus.Client
             MachineRoles = new MachineRoleRepository(client);
             MachinePolicies = new MachinePolicyRepository(client);
             Migrations = new MigrationRepository(client);
+            Reporting = new ReportingRepository(client);
             Subscriptions = new SubscriptionRepository(client);
             Environments = new EnvironmentRepository(client);
             Events = new EventRepository(client);
@@ -92,6 +93,8 @@ namespace Octopus.Client
         public IMachinePolicyRepository MachinePolicies { get; }
 
         public IMigrationRepository Migrations { get; }
+
+        public IReportingRepository Reporting { get; }
 
         public ISubscriptionRepository Subscriptions { get; }
 

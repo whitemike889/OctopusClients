@@ -79,6 +79,7 @@ Octopus.Client
     Octopus.Client.Repositories.Async.IProjectTriggerRepository ProjectTriggers { get; }
     Octopus.Client.Repositories.Async.IProxyRepository Proxies { get; }
     Octopus.Client.Repositories.Async.IReleaseRepository Releases { get; }
+    Octopus.Client.Repositories.Async.IReportingRepository Reporting { get; }
     Octopus.Client.Repositories.Async.IRetentionPolicyRepository RetentionPolicies { get; }
     Octopus.Client.Repositories.Async.ISchedulerRepository Schedulers { get; }
     Octopus.Client.Repositories.Async.IServerStatusRepository ServerStatus { get; }
@@ -154,6 +155,7 @@ Octopus.Client
     Octopus.Client.Repositories.IProjectTriggerRepository ProjectTriggers { get; }
     Octopus.Client.Repositories.IProxyRepository Proxies { get; }
     Octopus.Client.Repositories.IReleaseRepository Releases { get; }
+    Octopus.Client.Repositories.IReportingRepository Reporting { get; }
     Octopus.Client.Repositories.IRetentionPolicyRepository RetentionPolicies { get; }
     Octopus.Client.Repositories.ISchedulerRepository Schedulers { get; }
     Octopus.Client.Repositories.IServerStatusRepository ServerStatus { get; }
@@ -232,6 +234,7 @@ Octopus.Client
     Octopus.Client.Repositories.Async.IProjectTriggerRepository ProjectTriggers { get; }
     Octopus.Client.Repositories.Async.IProxyRepository Proxies { get; }
     Octopus.Client.Repositories.Async.IReleaseRepository Releases { get; }
+    Octopus.Client.Repositories.Async.IReportingRepository Reporting { get; }
     Octopus.Client.Repositories.Async.IRetentionPolicyRepository RetentionPolicies { get; }
     Octopus.Client.Repositories.Async.ISchedulerRepository Schedulers { get; }
     Octopus.Client.Repositories.Async.IServerStatusRepository ServerStatus { get; }
@@ -327,6 +330,7 @@ Octopus.Client
     Octopus.Client.Repositories.IProjectTriggerRepository ProjectTriggers { get; }
     Octopus.Client.Repositories.IProxyRepository Proxies { get; }
     Octopus.Client.Repositories.IReleaseRepository Releases { get; }
+    Octopus.Client.Repositories.IReportingRepository Reporting { get; }
     Octopus.Client.Repositories.IRetentionPolicyRepository RetentionPolicies { get; }
     Octopus.Client.Repositories.ISchedulerRepository Schedulers { get; }
     Octopus.Client.Repositories.IServerStatusRepository ServerStatus { get; }
@@ -1504,6 +1508,12 @@ Octopus.Client.Model
     static System.String StepName
     static Dictionary<String, String> AsDisplaySettings(String)
   }
+  class CsvReportData
+  {
+    .ctor()
+    String CsvLabels { get; set; }
+    String CsvValues { get; set; }
+  }
   class DashboardConfigurationResource
     Octopus.Client.Model.IResource
     Octopus.Client.Model.IAuditedResource
@@ -1816,16 +1826,6 @@ Octopus.Client.Model
     String ApiVersion { get; set; }
     Octopus.Client.Model.FeedType FeedType { get; }
     String RegistryPath { get; set; }
-  }
-  class DocumentIdFormatException
-    ISerializable
-    _Exception
-  {
-    .ctor(String)
-  }
-  abstract class DocumentIdParser
-  {
-    static void Split(String, String&, String&)
   }
   class EncryptedBytes
   {
@@ -2270,6 +2270,22 @@ Octopus.Client.Model
   {
     .ctor()
     Boolean IsInMaintenanceMode { get; set; }
+  }
+  class MetricResource
+    Octopus.Client.Model.IResource
+    Octopus.Client.Model.IAuditedResource
+    Octopus.Client.Model.INamedResource
+  {
+    .ctor()
+    String CreatedTime { get; set; }
+    Octopus.Client.Model.CsvReportData CsvReportData { get; set; }
+    String Name { get; set; }
+    String NodeId { get; set; }
+    Octopus.Client.Model.MetricType Type { get; set; }
+  }
+  MetricType
+  {
+      ApiStats = 0
   }
   class MissingVariableResource
   {
@@ -4259,6 +4275,11 @@ Octopus.Client.Repositories
     Octopus.Client.Model.ReleaseResource Modify(Octopus.Client.Model.ReleaseResource, Boolean)
     Octopus.Client.Model.ReleaseResource SnapshotVariables(Octopus.Client.Model.ReleaseResource)
   }
+  interface IReportingRepository
+  {
+    Octopus.Client.Model.MetricResource[] ApiStats()
+    Octopus.Client.Model.ReportDeploymentCountOverTimeResource[] DeploymentsCountedByWeek(String)
+  }
   interface IRetentionPolicyRepository
   {
     Octopus.Client.Model.TaskResource ApplyNow()
@@ -4704,6 +4725,11 @@ Octopus.Client.Repositories.Async
     Task<DeploymentTemplateResource> GetTemplate(Octopus.Client.Model.ReleaseResource)
     Task<ReleaseResource> Modify(Octopus.Client.Model.ReleaseResource, Boolean)
     Task<ReleaseResource> SnapshotVariables(Octopus.Client.Model.ReleaseResource)
+  }
+  interface IReportingRepository
+  {
+    Task<MetricResource[]> ApiStats()
+    Task<ReportDeploymentCountOverTimeResource[]> DeploymentsCountedByWeek(String)
   }
   interface IRetentionPolicyRepository
   {
