@@ -1508,12 +1508,6 @@ Octopus.Client.Model
     static System.String StepName
     static Dictionary<String, String> AsDisplaySettings(String)
   }
-  class CsvReportData
-  {
-    .ctor()
-    String CsvLabels { get; set; }
-    String CsvValues { get; set; }
-  }
   class DashboardConfigurationResource
     Octopus.Client.Model.IResource
     Octopus.Client.Model.IAuditedResource
@@ -2278,9 +2272,9 @@ Octopus.Client.Model
   {
     .ctor()
     String CreatedTime { get; set; }
-    Octopus.Client.Model.CsvReportData CsvReportData { get; set; }
     String Name { get; set; }
     String NodeId { get; set; }
+    Octopus.Client.Model.TextReportData ReportData { get; set; }
     Octopus.Client.Model.MetricType Type { get; set; }
   }
   MetricType
@@ -3294,6 +3288,18 @@ Octopus.Client.Model
     {
       static System.String EmailAddress
     }
+  }
+  class TextReportData
+  {
+    .ctor()
+    String[] Labels { get; set; }
+    Octopus.Client.Model.TextReportSeries[] Series { get; set; }
+  }
+  class TextReportSeries
+  {
+    .ctor()
+    String[] Data { get; set; }
+    String Label { get; set; }
   }
   class TrimAttribute
     _Attribute

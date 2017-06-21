@@ -1,5 +1,4 @@
-﻿
-namespace Octopus.Client.Model
+﻿namespace Octopus.Client.Model
 {
     public class MetricResource : Resource, INamedResource
     {
@@ -16,16 +15,19 @@ namespace Octopus.Client.Model
         public MetricType Type { get; set; }
 
         [Writeable]
-        public CsvReportData CsvReportData { get; set; }
+        public TextReportData ReportData { get; set; }
     }
 
-    public class CsvReportData
+    public class TextReportData
     {
-        [Writeable]
-        public string CsvLabels { get; set; }
+        public string[] Labels { get; set; }
+        public TextReportSeries[] Series { get; set; }
+    }
 
-        [Writeable]
-        public string CsvValues { get; set; }
+    public class TextReportSeries
+    {
+        public string Label { get; set; }
+        public string[] Data { get; set; }
     }
 
     public enum MetricType
