@@ -20,9 +20,9 @@ namespace Octopus.Client.Repositories.Async
         {
         }
 
-        public Task<ReportDeploymentCountOverTimeResource[]> DeploymentsCountedByWeek(string projectId)
+        public Task<ReportDeploymentCountOverTimeResource[]> DeploymentsCountedByWeek(string projectIds)
         {
-            return Client.Get<ReportDeploymentCountOverTimeResource[]>(Client.RootDocument.Link("Reporting/DeploymentsCountedByWeek"), new { projectId });
+            return Client.Get<ReportDeploymentCountOverTimeResource[]>(Client.RootDocument.Link("Reporting/DeploymentsCountedByWeek"), new { projectIds });
         }
 
         public Task<MetricResource[]> ApiStats()

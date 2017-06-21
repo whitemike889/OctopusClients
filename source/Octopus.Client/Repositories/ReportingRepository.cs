@@ -15,9 +15,9 @@ namespace Octopus.Client.Repositories
         {
         }
 
-        public ReportDeploymentCountOverTimeResource[] DeploymentsCountedByWeek(string projectId)
+        public ReportDeploymentCountOverTimeResource[] DeploymentsCountedByWeek(string projectIds)
         {
-            return Client.Get<ReportDeploymentCountOverTimeResource[]>(Client.RootDocument.Link("Reporting/DeploymentsCountedByWeek"), new { projectId });
+            return Client.Get<ReportDeploymentCountOverTimeResource[]>(Client.RootDocument.Link("Reporting/DeploymentsCountedByWeek"), new { projectIds });
         }
 
         public MetricResource[] ApiStats()
