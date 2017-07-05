@@ -8,7 +8,6 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net452' ">
@@ -29,7 +28,7 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="Assent" Version="0.8.0" />
+    <PackageReference Include="Assent" Version="1.0.0" />
     <PackageReference Include="Autofac" Version="4.1.1" />
     <PackageReference Include="FluentAssertions" Version="4.15.0" />
     <PackageReference Include="Microsoft.AspNetCore.Owin" Version="1.1.2" />

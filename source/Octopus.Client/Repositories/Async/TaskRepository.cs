@@ -18,7 +18,7 @@ namespace Octopus.Client.Repositories.Async
         Task<TaskDetailsResource> GetDetails(TaskResource resource);
         Task<TaskResource> ExecuteActionTemplate(ActionTemplateResource resource, Dictionary<string, PropertyValueResource> properties, string[] machineIds = null, string[] environmentIds = null, string[] targetRoles = null, string description = null);
         Task<TaskResource> ExecuteCommunityActionTemplatesSynchronisation(string description = null);
-        Task<List<TaskResource>> GetAllActive();
+        Task<List<TaskResource>> GetAllActive(int pageSize = int.MaxValue);
         Task<string> GetRawOutputLog(TaskResource resource);
         Task Rerun(TaskResource resource);
         Task Cancel(TaskResource resource);
@@ -27,6 +27,7 @@ namespace Octopus.Client.Repositories.Async
         Task WaitForCompletion(TaskResource task, int pollIntervalSeconds = 4, int timeoutAfterMinutes = 0, Action<TaskResource[]> interval = null);
         Task WaitForCompletion(TaskResource[] tasks, int pollIntervalSeconds = 4, int timeoutAfterMinutes = 0, Action<TaskResource[]> interval = null);
         Task WaitForCompletion(TaskResource[] tasks, int pollIntervalSeconds = 4, int timeoutAfterMinutes = 0, Func<TaskResource[], Task> interval = null);
+        Task WaitForCompletion(TaskResource[] tasks, int pollIntervalSeconds = 4, TimeSpan? timeoutAfter = null, Func<TaskResource[], Task> interval = null);
     }
 
     class TaskRepository : BasicRepository<TaskResource>, ITaskRepository
@@ -172,8 +173,11 @@ namespace Octopus.Client.Repositories.Async
             return WaitForCompletion(tasks, pollIntervalSeconds, timeoutAfterMinutes, taskInterval);
         }
 
-        public async Task WaitForCompletion(TaskResource[] tasks, int pollIntervalSeconds = 4, int timeoutAfterMinutes = 0, Func<TaskResource[], Task> interval = null)
-        {
+        public Task WaitForCompletion(TaskResource[] tasks, int pollIntervalSeconds = 4, int timeoutAfterMinutes = 0, Func<TaskResource[], Task> interval = null) 
+            => WaitForCompletion(tasks, pollIntervalSeconds, TimeSpan.FromMinutes(timeoutAfterMinutes), interval);
+
+        public async Task WaitForCompletion(TaskResource[] tasks, int pollIntervalSeconds = 4, TimeSpan? timeoutAfter = null, Func<TaskResource[], Task> interval = null)
+        { 
             var start = Stopwatch.StartNew();
             if (tasks == null || tasks.Length == 0)
                 return;
@@ -191,15 +195,20 @@ namespace Octopus.Client.Repositories.Async
                 if (stillRunning.All(t => t.IsCompleted))
                     return;
 
-                if (timeoutAfterMinutes > 0 && start.Elapsed.TotalMinutes > timeoutAfterMinutes)
+                if (timeoutAfter.HasValue && timeoutAfter > TimeSpan.Zero && start.Elapsed > timeoutAfter)
                 {
-                    throw new TimeoutException($"One or more tasks did not complete before the timeout was reached. We waited {start.Elapsed.TotalMinutes:n1} minutes for the tasks to complete.");
+                    throw new TimeoutException($"One or more tasks did not complete before the timeout was reached. We waited {start.Elapsed:hh\\:mm\\:ss}  for the tasks to complete.");
                 }
 
-                Thread.Sleep(pollIntervalSeconds * 1000);
+                await Task.Delay(TimeSpan.FromSeconds(pollIntervalSeconds));
             }
         }
 
-        public Task<List<TaskResource>> GetAllActive() => FindAll(pathParameters: new {active = true});
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pageSize">Number of items per page, setting to less than the total items still retreives all items, but uses multiple requests reducing memory load on the server</param>
+        /// <returns></returns>
+        public Task<List<TaskResource>> GetAllActive(int pageSize = int.MaxValue) => FindAll(pathParameters: new { active = true, take = pageSize });
     }
 }
