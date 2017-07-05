@@ -1,4 +1,6 @@
-﻿namespace Octopus.Client.Model
+﻿using System;
+
+namespace Octopus.Client.Model
 {
     public class MetricResource : Resource, INamedResource
     {
@@ -6,13 +8,16 @@
         public string Name { get; set; }
 
         [Writeable]
+        public string Type { get; set; }
+
+        [Writeable]
         public string NodeId { get; set; }
 
         [Writeable]
-        public string CreatedTime { get; set; }
+        public DateTimeOffset CreatedTime { get; set; }
 
         [Writeable]
-        public MetricType Type { get; set; }
+        public ReportingType ReportingType { get; set; }
 
         [Writeable]
         public TextReportData ReportData { get; set; }
@@ -30,7 +35,7 @@
         public string[] Data { get; set; }
     }
 
-    public enum MetricType
+    public enum ReportingType
     {
         ApiStats,
     }

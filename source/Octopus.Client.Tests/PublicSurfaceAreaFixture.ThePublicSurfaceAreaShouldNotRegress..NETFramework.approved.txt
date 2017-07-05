@@ -2273,15 +2273,12 @@ Octopus.Client.Model
     Octopus.Client.Model.INamedResource
   {
     .ctor()
-    String CreatedTime { get; set; }
+    DateTimeOffset CreatedTime { get; set; }
     String Name { get; set; }
     String NodeId { get; set; }
     Octopus.Client.Model.TextReportData ReportData { get; set; }
-    Octopus.Client.Model.MetricType Type { get; set; }
-  }
-  MetricType
-  {
-      ApiStats = 0
+    Octopus.Client.Model.ReportingType ReportingType { get; set; }
+    String Type { get; set; }
   }
   class MissingVariableResource
   {
@@ -2770,6 +2767,10 @@ Octopus.Client.Model
     .ctor()
     String ProjectId { get; set; }
     Octopus.Client.Model.NumericReportData ReportData { get; set; }
+  }
+  ReportingType
+  {
+      ApiStats = 0
   }
   abstract class Resource
     Octopus.Client.Model.IResource
