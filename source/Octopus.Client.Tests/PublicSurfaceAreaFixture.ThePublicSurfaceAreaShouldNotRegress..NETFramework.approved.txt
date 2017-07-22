@@ -4133,6 +4133,8 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IFindByName<OctopusServerNodeResource>
     Octopus.Client.Repositories.IPaginate<OctopusServerNodeResource>
   {
+    Int32 GetTaskCount(Octopus.Client.Model.OctopusServerNodeResource, String)
+    List<TaskResource> GetTasks(Octopus.Client.Model.OctopusServerNodeResource, Int32, Nullable<Int32>, String)
   }
   interface IPaginate`1
   {
