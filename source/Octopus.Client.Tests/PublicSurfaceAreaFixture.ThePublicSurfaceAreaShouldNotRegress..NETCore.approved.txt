@@ -3727,6 +3727,8 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IFindByName<OctopusServerNodeResource>
     Octopus.Client.Repositories.Async.IPaginate<OctopusServerNodeResource>
   {
+    Task<Int32> GetTaskCount(Octopus.Client.Model.OctopusServerNodeResource, String)
+    Task<IList<TaskResource>> GetTasks(Octopus.Client.Model.OctopusServerNodeResource, Int32, Nullable<Int32>, String)
   }
   interface IPaginate`1
   {
