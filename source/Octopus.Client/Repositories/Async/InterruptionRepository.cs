@@ -4,7 +4,7 @@ using Octopus.Client.Model;
 
 namespace Octopus.Client.Repositories.Async
 {
-    public interface IInterruptionRepository : IGet<InterruptionResource>
+    public interface IInterruptionRepository : IGet<InterruptionResource>, IGetList<InterruptionResource>
     {
         /// <summary>
         /// 

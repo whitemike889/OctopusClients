@@ -6,7 +6,7 @@ using Octopus.Client.Model.Endpoints;
 
 namespace Octopus.Client.Repositories
 {
-    public interface IMachineRepository : IFindByName<MachineResource>, IGet<MachineResource>, ICreate<MachineResource>, IModify<MachineResource>, IDelete<MachineResource>
+    public interface IMachineRepository : IFindByName<MachineResource>, IGet<MachineResource>, ICreate<MachineResource>, IModify<MachineResource>, IDelete<MachineResource>, IGetList<MachineResource>
     {
         MachineResource Discover(string host, int port = 10933, DiscoverableEndpointType? discoverableEndpointType = null);
         MachineConnectionStatus GetConnectionStatus(MachineResource machine);

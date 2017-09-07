@@ -10,7 +10,8 @@ namespace Octopus.Client.Repositories.Async
         IGet<LibraryVariableSetResource>,
         IModify<LibraryVariableSetResource>,
         IDelete<LibraryVariableSetResource>,
-        IFindByName<LibraryVariableSetResource>
+        IFindByName<LibraryVariableSetResource>,
+        IGetList<LibraryVariableSetResource>
     {
         Task<LibraryVariableSetEditor> CreateOrModify(string name);
         Task<LibraryVariableSetEditor> CreateOrModify(string name, string description);

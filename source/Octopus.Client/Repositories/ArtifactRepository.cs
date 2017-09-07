@@ -9,7 +9,8 @@ namespace Octopus.Client.Repositories
         IGet<ArtifactResource>,
         ICreate<ArtifactResource>,
         IModify<ArtifactResource>,
-        IDelete<ArtifactResource>
+        IDelete<ArtifactResource>,
+        IGetList<ArtifactResource>
     {
         Stream GetContent(ArtifactResource artifact);
         void PutContent(ArtifactResource artifact, Stream contentStream);

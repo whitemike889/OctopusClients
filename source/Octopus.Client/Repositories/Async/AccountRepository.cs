@@ -3,7 +3,7 @@ using Octopus.Client.Model.Accounts;
 
 namespace Octopus.Client.Repositories.Async
 {
-    public interface IAccountRepository : ICreate<AccountResource>, IModify<AccountResource>, IDelete<AccountResource>, IGet<AccountResource>, IFindByName<AccountResource>
+    public interface IAccountRepository : ICreate<AccountResource>, IModify<AccountResource>, IDelete<AccountResource>, IGet<AccountResource>, IFindByName<AccountResource>, IGetList<AccountResource>
     {
     }
 

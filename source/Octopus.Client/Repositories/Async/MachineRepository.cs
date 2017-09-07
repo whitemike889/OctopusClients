@@ -7,7 +7,7 @@ using Octopus.Client.Model.Endpoints;
 
 namespace Octopus.Client.Repositories.Async
 {
-    public interface IMachineRepository : IFindByName<MachineResource>, IGet<MachineResource>, ICreate<MachineResource>, IModify<MachineResource>, IDelete<MachineResource>
+    public interface IMachineRepository : IFindByName<MachineResource>, IGet<MachineResource>, ICreate<MachineResource>, IModify<MachineResource>, IDelete<MachineResource>, IGetList<MachineResource>
     {
         Task<MachineResource> Discover(string host, int port = 10933, DiscoverableEndpointType? discoverableEndpointType = null);
         Task<MachineConnectionStatus> GetConnectionStatus(MachineResource machine);

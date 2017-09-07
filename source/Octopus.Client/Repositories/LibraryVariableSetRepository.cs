@@ -7,6 +7,7 @@ namespace Octopus.Client.Repositories
     public interface ILibraryVariableSetRepository :
         ICreate<LibraryVariableSetResource>,
         IGet<LibraryVariableSetResource>,
+        IGetList<LibraryVariableSetResource>,
         IModify<LibraryVariableSetResource>,
         IDelete<LibraryVariableSetResource>,
         IFindByName<LibraryVariableSetResource>

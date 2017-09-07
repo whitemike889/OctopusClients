@@ -8,7 +8,8 @@ namespace Octopus.Client.Repositories
         IModify<TeamResource>,
         IDelete<TeamResource>,
         IFindByName<TeamResource>,
-        IGet<TeamResource>
+        IGet<TeamResource>,
+        IGetList<TeamResource>
     {
     }
     

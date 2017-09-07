@@ -10,7 +10,8 @@ namespace Octopus.Client.Repositories.Async
         IGet<ArtifactResource>,
         ICreate<ArtifactResource>,
         IModify<ArtifactResource>,
-        IDelete<ArtifactResource>
+        IDelete<ArtifactResource>,
+        IGetList<ArtifactResource>
     {
         Task<Stream> GetContent(ArtifactResource artifact);
         Task PutContent(ArtifactResource artifact, Stream contentStream);

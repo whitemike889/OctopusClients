@@ -9,7 +9,8 @@ namespace Octopus.Client.Repositories
         IGet<UserResource>,
         IModify<UserResource>,
         IDelete<UserResource>,
-        ICreate<UserResource>
+        ICreate<UserResource>,
+        IGetList<UserResource>
     {
         UserResource Create(string username, string displayName, string password = null, string emailAddress = null);
         UserResource CreateServiceAccount(string username, string displayName);
