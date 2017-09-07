@@ -3907,6 +3907,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IGet<AccountResource>
     Octopus.Client.Repositories.IFindByName<AccountResource>
     Octopus.Client.Repositories.IPaginate<AccountResource>
+    Octopus.Client.Repositories.IGetList<AccountResource>
   {
   }
   interface IActionTemplateRepository
@@ -3914,6 +3915,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IModify<ActionTemplateResource>
     Octopus.Client.Repositories.IDelete<ActionTemplateResource>
     Octopus.Client.Repositories.IGet<ActionTemplateResource>
+    Octopus.Client.Repositories.IGetList<ActionTemplateResource>
     Octopus.Client.Repositories.IFindByName<ActionTemplateResource>
     Octopus.Client.Repositories.IPaginate<ActionTemplateResource>
     Octopus.Client.Repositories.IGetAll<ActionTemplateResource>
@@ -3929,6 +3931,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.ICreate<ArtifactResource>
     Octopus.Client.Repositories.IModify<ArtifactResource>
     Octopus.Client.Repositories.IDelete<ArtifactResource>
+    Octopus.Client.Repositories.IGetList<ArtifactResource>
   {
     Octopus.Client.Model.ResourceCollection<ArtifactResource> FindRegarding(Octopus.Client.Model.IResource)
     Stream GetContent(Octopus.Client.Model.ArtifactResource)
@@ -3950,6 +3953,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IGet<CertificateConfigurationResource>
     Octopus.Client.Repositories.IFindByName<CertificateConfigurationResource>
     Octopus.Client.Repositories.IPaginate<CertificateConfigurationResource>
+    Octopus.Client.Repositories.IGetList<CertificateConfigurationResource>
   {
     Octopus.Client.Model.CertificateConfigurationResource GetOctopusCertificate()
   }
@@ -3960,6 +3964,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.ICreate<CertificateResource>
     Octopus.Client.Repositories.IModify<CertificateResource>
     Octopus.Client.Repositories.IDelete<CertificateResource>
+    Octopus.Client.Repositories.IGetList<CertificateResource>
   {
     void Archive(Octopus.Client.Model.CertificateResource)
     Stream Export(Octopus.Client.Model.CertificateResource, Nullable<CertificateFormat>, String, Boolean)
@@ -3973,6 +3978,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IGet<ChannelResource>
     Octopus.Client.Repositories.IDelete<ChannelResource>
     Octopus.Client.Repositories.IPaginate<ChannelResource>
+    Octopus.Client.Repositories.IGetList<ChannelResource>
   {
     Octopus.Client.Editors.ChannelEditor CreateOrModify(Octopus.Client.Model.ProjectResource, String)
     Octopus.Client.Editors.ChannelEditor CreateOrModify(Octopus.Client.Model.ProjectResource, String, String)
@@ -4019,6 +4025,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IGet<DeploymentResource>
     Octopus.Client.Repositories.ICreate<DeploymentResource>
     Octopus.Client.Repositories.IPaginate<DeploymentResource>
+    Octopus.Client.Repositories.IGetList<DeploymentResource>
   {
     Octopus.Client.Model.ResourceCollection<DeploymentResource> FindAll(String[], String[], Int32, Nullable<Int32>)
     Octopus.Client.Model.ResourceCollection<DeploymentResource> FindBy(String[], String[], Int32, Nullable<Int32>)
@@ -4030,6 +4037,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IFindByName<EnvironmentResource>
     Octopus.Client.Repositories.IPaginate<EnvironmentResource>
     Octopus.Client.Repositories.IGet<EnvironmentResource>
+    Octopus.Client.Repositories.IGetList<EnvironmentResource>
     Octopus.Client.Repositories.ICreate<EnvironmentResource>
     Octopus.Client.Repositories.IModify<EnvironmentResource>
     Octopus.Client.Repositories.IDelete<EnvironmentResource>
@@ -4042,6 +4050,7 @@ Octopus.Client.Repositories
   }
   interface IEventRepository
     Octopus.Client.Repositories.IGet<EventResource>
+    Octopus.Client.Repositories.IGetList<EventResource>
   {
     Octopus.Client.Model.ResourceCollection<EventResource> List(Int32, String, String, Boolean)
     Octopus.Client.Model.ResourceCollection<EventResource> List(Int32, Nullable<Int32>, String, String, String, String, Boolean, String, String, String, String, String, String, String, String, Nullable<Int64>, Nullable<Int64>, String)
@@ -4058,6 +4067,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IGet<FeedResource>
     Octopus.Client.Repositories.IFindByName<FeedResource>
     Octopus.Client.Repositories.IPaginate<FeedResource>
+    Octopus.Client.Repositories.IGetList<FeedResource>
   {
     List<PackageResource> GetVersions(Octopus.Client.Model.FeedResource, String[])
   }
@@ -4070,15 +4080,19 @@ Octopus.Client.Repositories
   interface IGet`1
   {
     Octopus.Client.Repositories.TResource Get(String)
-    List<TResource> Get(String[])
     Octopus.Client.Repositories.TResource Refresh(Octopus.Client.Repositories.TResource)
   }
   interface IGetAll`1
   {
     List<TResource> GetAll()
   }
+  interface IGetList`1
+  {
+    List<TResource> Get(String[])
+  }
   interface IInterruptionRepository
     Octopus.Client.Repositories.IGet<InterruptionResource>
+    Octopus.Client.Repositories.IGetList<InterruptionResource>
   {
     Octopus.Client.Model.UserResource GetResponsibleUser(Octopus.Client.Model.InterruptionResource)
     Octopus.Client.Model.ResourceCollection<InterruptionResource> List(Int32, Nullable<Int32>, Boolean, String)
@@ -4088,6 +4102,7 @@ Octopus.Client.Repositories
   interface ILibraryVariableSetRepository
     Octopus.Client.Repositories.ICreate<LibraryVariableSetResource>
     Octopus.Client.Repositories.IGet<LibraryVariableSetResource>
+    Octopus.Client.Repositories.IGetList<LibraryVariableSetResource>
     Octopus.Client.Repositories.IModify<LibraryVariableSetResource>
     Octopus.Client.Repositories.IDelete<LibraryVariableSetResource>
     Octopus.Client.Repositories.IFindByName<LibraryVariableSetResource>
@@ -4103,6 +4118,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IDelete<LifecycleResource>
     Octopus.Client.Repositories.IFindByName<LifecycleResource>
     Octopus.Client.Repositories.IPaginate<LifecycleResource>
+    Octopus.Client.Repositories.IGetList<LifecycleResource>
   {
     Octopus.Client.Editors.LifecycleEditor CreateOrModify(String)
     Octopus.Client.Editors.LifecycleEditor CreateOrModify(String, String)
@@ -4114,6 +4130,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IModify<MachinePolicyResource>
     Octopus.Client.Repositories.IGet<MachinePolicyResource>
     Octopus.Client.Repositories.IDelete<MachinePolicyResource>
+    Octopus.Client.Repositories.IGetList<MachinePolicyResource>
   {
   }
   interface IMachineRepository
@@ -4123,6 +4140,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.ICreate<MachineResource>
     Octopus.Client.Repositories.IModify<MachineResource>
     Octopus.Client.Repositories.IDelete<MachineResource>
+    Octopus.Client.Repositories.IGetList<MachineResource>
   {
     Octopus.Client.Editors.MachineEditor CreateOrModify(String, Octopus.Client.Model.Endpoints.EndpointResource, Octopus.Client.Model.EnvironmentResource[], String[], Octopus.Client.Model.TenantResource[], Octopus.Client.Model.TagResource[], Nullable<TenantedDeploymentMode>)
     Octopus.Client.Editors.MachineEditor CreateOrModify(String, Octopus.Client.Model.Endpoints.EndpointResource, Octopus.Client.Model.EnvironmentResource[], String[])
@@ -4145,6 +4163,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IGet<OctopusServerNodeResource>
     Octopus.Client.Repositories.IFindByName<OctopusServerNodeResource>
     Octopus.Client.Repositories.IPaginate<OctopusServerNodeResource>
+    Octopus.Client.Repositories.IGetList<OctopusServerNodeResource>
   {
   }
   interface IPaginate`1
@@ -4162,6 +4181,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IModify<ProjectGroupResource>
     Octopus.Client.Repositories.IDelete<ProjectGroupResource>
     Octopus.Client.Repositories.IGetAll<ProjectGroupResource>
+    Octopus.Client.Repositories.IGetList<ProjectGroupResource>
   {
     Octopus.Client.Editors.ProjectGroupEditor CreateOrModify(String)
     Octopus.Client.Editors.ProjectGroupEditor CreateOrModify(String, String)
@@ -4175,6 +4195,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IModify<ProjectResource>
     Octopus.Client.Repositories.IDelete<ProjectResource>
     Octopus.Client.Repositories.IGetAll<ProjectResource>
+    Octopus.Client.Repositories.IGetList<ProjectResource>
   {
     Octopus.Client.Editors.ProjectEditor CreateOrModify(String, Octopus.Client.Model.ProjectGroupResource, Octopus.Client.Model.LifecycleResource)
     Octopus.Client.Editors.ProjectEditor CreateOrModify(String, Octopus.Client.Model.ProjectGroupResource, Octopus.Client.Model.LifecycleResource, String)
@@ -4202,6 +4223,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IDelete<ProxyResource>
     Octopus.Client.Repositories.IFindByName<ProxyResource>
     Octopus.Client.Repositories.IPaginate<ProxyResource>
+    Octopus.Client.Repositories.IGetList<ProxyResource>
   {
   }
   interface IReleaseRepository
@@ -4210,6 +4232,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IPaginate<ReleaseResource>
     Octopus.Client.Repositories.IModify<ReleaseResource>
     Octopus.Client.Repositories.IDelete<ReleaseResource>
+    Octopus.Client.Repositories.IGetList<ReleaseResource>
   {
     Octopus.Client.Model.ReleaseResource Create(Octopus.Client.Model.ReleaseResource, Boolean)
     Octopus.Client.Model.ResourceCollection<ArtifactResource> GetArtifacts(Octopus.Client.Model.ReleaseResource, Int32, Nullable<Int32>)
@@ -4243,6 +4266,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IModify<SubscriptionResource>
     Octopus.Client.Repositories.IGet<SubscriptionResource>
     Octopus.Client.Repositories.IDelete<SubscriptionResource>
+    Octopus.Client.Repositories.IGetList<SubscriptionResource>
   {
     Octopus.Client.Editors.SubscriptionEditor CreateOrModify(String, Octopus.Client.Model.EventNotificationSubscription, Boolean)
   }
@@ -4254,6 +4278,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IFindByName<TagSetResource>
     Octopus.Client.Repositories.IPaginate<TagSetResource>
     Octopus.Client.Repositories.IGetAll<TagSetResource>
+    Octopus.Client.Repositories.IGetList<TagSetResource>
   {
     Octopus.Client.Editors.TagSetEditor CreateOrModify(String)
     Octopus.Client.Editors.TagSetEditor CreateOrModify(String, String)
@@ -4263,6 +4288,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IPaginate<TaskResource>
     Octopus.Client.Repositories.IGet<TaskResource>
     Octopus.Client.Repositories.ICreate<TaskResource>
+    Octopus.Client.Repositories.IGetList<TaskResource>
   {
     void Cancel(Octopus.Client.Model.TaskResource)
     Octopus.Client.Model.TaskResource ExecuteActionTemplate(Octopus.Client.Model.ActionTemplateResource, Dictionary<String, PropertyValueResource>, String[], String[], String[], String)
@@ -4289,6 +4315,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IFindByName<TeamResource>
     Octopus.Client.Repositories.IPaginate<TeamResource>
     Octopus.Client.Repositories.IGet<TeamResource>
+    Octopus.Client.Repositories.IGetList<TeamResource>
   {
   }
   interface ITenantRepository
@@ -4299,6 +4326,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IFindByName<TenantResource>
     Octopus.Client.Repositories.IPaginate<TenantResource>
     Octopus.Client.Repositories.IGetAll<TenantResource>
+    Octopus.Client.Repositories.IGetList<TenantResource>
   {
     Octopus.Client.Editors.TenantEditor CreateOrModify(String)
     List<TenantResource> FindAll(String, String[], Int32)
@@ -4313,6 +4341,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.IModify<UserResource>
     Octopus.Client.Repositories.IDelete<UserResource>
     Octopus.Client.Repositories.ICreate<UserResource>
+    Octopus.Client.Repositories.IGetList<UserResource>
   {
     Octopus.Client.Model.UserResource Create(String, String, String, String)
     Octopus.Client.Model.ApiKeyResource CreateApiKey(Octopus.Client.Model.UserResource, String)
@@ -4335,6 +4364,7 @@ Octopus.Client.Repositories
     Octopus.Client.Repositories.ICreate<UserRoleResource>
     Octopus.Client.Repositories.IModify<UserRoleResource>
     Octopus.Client.Repositories.IDelete<UserRoleResource>
+    Octopus.Client.Repositories.IGetList<UserRoleResource>
   {
   }
   interface IVariableSetRepository
@@ -4353,6 +4383,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IGet<AccountResource>
     Octopus.Client.Repositories.Async.IFindByName<AccountResource>
     Octopus.Client.Repositories.Async.IPaginate<AccountResource>
+    Octopus.Client.Repositories.Async.IGetList<AccountResource>
   {
   }
   interface IActionTemplateRepository
@@ -4363,6 +4394,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IFindByName<ActionTemplateResource>
     Octopus.Client.Repositories.Async.IPaginate<ActionTemplateResource>
     Octopus.Client.Repositories.Async.IGetAll<ActionTemplateResource>
+    Octopus.Client.Repositories.Async.IGetList<ActionTemplateResource>
   {
     Task<ActionTemplateResource> GetVersion(Octopus.Client.Model.ActionTemplateResource, Int32)
     Task<List<ActionTemplateSearchResource>> Search()
@@ -4375,6 +4407,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.ICreate<ArtifactResource>
     Octopus.Client.Repositories.Async.IModify<ArtifactResource>
     Octopus.Client.Repositories.Async.IDelete<ArtifactResource>
+    Octopus.Client.Repositories.Async.IGetList<ArtifactResource>
   {
     Task<ResourceCollection<ArtifactResource>> FindRegarding(Octopus.Client.Model.IResource)
     Task<Stream> GetContent(Octopus.Client.Model.ArtifactResource)
@@ -4396,6 +4429,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IGet<CertificateConfigurationResource>
     Octopus.Client.Repositories.Async.IFindByName<CertificateConfigurationResource>
     Octopus.Client.Repositories.Async.IPaginate<CertificateConfigurationResource>
+    Octopus.Client.Repositories.Async.IGetList<CertificateConfigurationResource>
   {
     Task<CertificateConfigurationResource> GetOctopusCertificate()
   }
@@ -4406,6 +4440,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.ICreate<CertificateResource>
     Octopus.Client.Repositories.Async.IModify<CertificateResource>
     Octopus.Client.Repositories.Async.IDelete<CertificateResource>
+    Octopus.Client.Repositories.Async.IGetList<CertificateResource>
   {
     Task Archive(Octopus.Client.Model.CertificateResource)
     Task<Stream> Export(Octopus.Client.Model.CertificateResource, Nullable<CertificateFormat>, String, Boolean)
@@ -4419,6 +4454,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IGet<ChannelResource>
     Octopus.Client.Repositories.Async.IDelete<ChannelResource>
     Octopus.Client.Repositories.Async.IPaginate<ChannelResource>
+    Octopus.Client.Repositories.Async.IGetList<ChannelResource>
   {
     Task<ChannelEditor> CreateOrModify(Octopus.Client.Model.ProjectResource, String)
     Task<ChannelEditor> CreateOrModify(Octopus.Client.Model.ProjectResource, String, String)
@@ -4465,6 +4501,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IGet<DeploymentResource>
     Octopus.Client.Repositories.Async.ICreate<DeploymentResource>
     Octopus.Client.Repositories.Async.IPaginate<DeploymentResource>
+    Octopus.Client.Repositories.Async.IGetList<DeploymentResource>
   {
     Task<ResourceCollection<DeploymentResource>> FindAll(String[], String[], Int32, Nullable<Int32>)
     Task<ResourceCollection<DeploymentResource>> FindBy(String[], String[], Int32, Nullable<Int32>)
@@ -4480,6 +4517,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IModify<EnvironmentResource>
     Octopus.Client.Repositories.Async.IDelete<EnvironmentResource>
     Octopus.Client.Repositories.Async.IGetAll<EnvironmentResource>
+    Octopus.Client.Repositories.Async.IGetList<EnvironmentResource>
   {
     Task<EnvironmentEditor> CreateOrModify(String)
     Task<EnvironmentEditor> CreateOrModify(String, String)
@@ -4488,6 +4526,7 @@ Octopus.Client.Repositories.Async
   }
   interface IEventRepository
     Octopus.Client.Repositories.Async.IGet<EventResource>
+    Octopus.Client.Repositories.Async.IGetList<EventResource>
   {
     Task<ResourceCollection<EventResource>> List(Int32, String, String, Boolean)
     Task<ResourceCollection<EventResource>> List(Int32, Nullable<Int32>, String, String, String, String, Boolean, String, String, String, String, String, String, String, String, Nullable<Int64>, Nullable<Int64>, String)
@@ -4504,6 +4543,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IGet<FeedResource>
     Octopus.Client.Repositories.Async.IFindByName<FeedResource>
     Octopus.Client.Repositories.Async.IPaginate<FeedResource>
+    Octopus.Client.Repositories.Async.IGetList<FeedResource>
   {
     Task<List<PackageResource>> GetVersions(Octopus.Client.Model.FeedResource, String[])
   }
@@ -4516,15 +4556,19 @@ Octopus.Client.Repositories.Async
   interface IGet`1
   {
     Task<TResource> Get(String)
-    Task<List<TResource>> Get(String[])
     Task<TResource> Refresh(Octopus.Client.Repositories.Async.TResource)
   }
   interface IGetAll`1
   {
     Task<List<TResource>> GetAll()
   }
+  interface IGetList`1
+  {
+    Task<List<TResource>> Get(String[])
+  }
   interface IInterruptionRepository
     Octopus.Client.Repositories.Async.IGet<InterruptionResource>
+    Octopus.Client.Repositories.Async.IGetList<InterruptionResource>
   {
     Task<UserResource> GetResponsibleUser(Octopus.Client.Model.InterruptionResource)
     Task<ResourceCollection<InterruptionResource>> List(Int32, Nullable<Int32>, Boolean, String)
@@ -4538,6 +4582,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IDelete<LibraryVariableSetResource>
     Octopus.Client.Repositories.Async.IFindByName<LibraryVariableSetResource>
     Octopus.Client.Repositories.Async.IPaginate<LibraryVariableSetResource>
+    Octopus.Client.Repositories.Async.IGetList<LibraryVariableSetResource>
   {
     Task<LibraryVariableSetEditor> CreateOrModify(String)
     Task<LibraryVariableSetEditor> CreateOrModify(String, String)
@@ -4549,6 +4594,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IDelete<LifecycleResource>
     Octopus.Client.Repositories.Async.IFindByName<LifecycleResource>
     Octopus.Client.Repositories.Async.IPaginate<LifecycleResource>
+    Octopus.Client.Repositories.Async.IGetList<LifecycleResource>
   {
     Task<LifecycleEditor> CreateOrModify(String)
     Task<LifecycleEditor> CreateOrModify(String, String)
@@ -4560,6 +4606,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IModify<MachinePolicyResource>
     Octopus.Client.Repositories.Async.IGet<MachinePolicyResource>
     Octopus.Client.Repositories.Async.IDelete<MachinePolicyResource>
+    Octopus.Client.Repositories.Async.IGetList<MachinePolicyResource>
   {
   }
   interface IMachineRepository
@@ -4569,6 +4616,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.ICreate<MachineResource>
     Octopus.Client.Repositories.Async.IModify<MachineResource>
     Octopus.Client.Repositories.Async.IDelete<MachineResource>
+    Octopus.Client.Repositories.Async.IGetList<MachineResource>
   {
     Task<MachineEditor> CreateOrModify(String, Octopus.Client.Model.Endpoints.EndpointResource, Octopus.Client.Model.EnvironmentResource[], String[], Octopus.Client.Model.TenantResource[], Octopus.Client.Model.TagResource[], Nullable<TenantedDeploymentMode>)
     Task<MachineEditor> CreateOrModify(String, Octopus.Client.Model.Endpoints.EndpointResource, Octopus.Client.Model.EnvironmentResource[], String[])
@@ -4591,6 +4639,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IGet<OctopusServerNodeResource>
     Octopus.Client.Repositories.Async.IFindByName<OctopusServerNodeResource>
     Octopus.Client.Repositories.Async.IPaginate<OctopusServerNodeResource>
+    Octopus.Client.Repositories.Async.IGetList<OctopusServerNodeResource>
   {
   }
   interface IPaginate`1
@@ -4608,6 +4657,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IModify<ProjectGroupResource>
     Octopus.Client.Repositories.Async.IDelete<ProjectGroupResource>
     Octopus.Client.Repositories.Async.IGetAll<ProjectGroupResource>
+    Octopus.Client.Repositories.Async.IGetList<ProjectGroupResource>
   {
     Task<ProjectGroupEditor> CreateOrModify(String)
     Task<ProjectGroupEditor> CreateOrModify(String, String)
@@ -4621,6 +4671,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IModify<ProjectResource>
     Octopus.Client.Repositories.Async.IDelete<ProjectResource>
     Octopus.Client.Repositories.Async.IGetAll<ProjectResource>
+    Octopus.Client.Repositories.Async.IGetList<ProjectResource>
   {
     Task<ProjectEditor> CreateOrModify(String, Octopus.Client.Model.ProjectGroupResource, Octopus.Client.Model.LifecycleResource)
     Task<ProjectEditor> CreateOrModify(String, Octopus.Client.Model.ProjectGroupResource, Octopus.Client.Model.LifecycleResource, String)
@@ -4648,6 +4699,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IDelete<ProxyResource>
     Octopus.Client.Repositories.Async.IFindByName<ProxyResource>
     Octopus.Client.Repositories.Async.IPaginate<ProxyResource>
+    Octopus.Client.Repositories.Async.IGetList<ProxyResource>
   {
   }
   interface IReleaseRepository
@@ -4656,6 +4708,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IPaginate<ReleaseResource>
     Octopus.Client.Repositories.Async.IModify<ReleaseResource>
     Octopus.Client.Repositories.Async.IDelete<ReleaseResource>
+    Octopus.Client.Repositories.Async.IGetList<ReleaseResource>
   {
     Task<ReleaseResource> Create(Octopus.Client.Model.ReleaseResource, Boolean)
     Task<ResourceCollection<ArtifactResource>> GetArtifacts(Octopus.Client.Model.ReleaseResource, Int32, Nullable<Int32>)
@@ -4689,6 +4742,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IModify<SubscriptionResource>
     Octopus.Client.Repositories.Async.IGet<SubscriptionResource>
     Octopus.Client.Repositories.Async.IDelete<SubscriptionResource>
+    Octopus.Client.Repositories.Async.IGetList<SubscriptionResource>
   {
     Task<SubscriptionEditor> CreateOrModify(String, Octopus.Client.Model.EventNotificationSubscription, Boolean)
   }
@@ -4700,6 +4754,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IFindByName<TagSetResource>
     Octopus.Client.Repositories.Async.IPaginate<TagSetResource>
     Octopus.Client.Repositories.Async.IGetAll<TagSetResource>
+    Octopus.Client.Repositories.Async.IGetList<TagSetResource>
   {
     Task<TagSetEditor> CreateOrModify(String)
     Task<TagSetEditor> CreateOrModify(String, String)
@@ -4709,6 +4764,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IPaginate<TaskResource>
     Octopus.Client.Repositories.Async.IGet<TaskResource>
     Octopus.Client.Repositories.Async.ICreate<TaskResource>
+    Octopus.Client.Repositories.Async.IGetList<TaskResource>
   {
     Task Cancel(Octopus.Client.Model.TaskResource)
     Task<TaskResource> ExecuteActionTemplate(Octopus.Client.Model.ActionTemplateResource, Dictionary<String, PropertyValueResource>, String[], String[], String[], String)
@@ -4736,12 +4792,14 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IFindByName<TeamResource>
     Octopus.Client.Repositories.Async.IPaginate<TeamResource>
     Octopus.Client.Repositories.Async.IGet<TeamResource>
+    Octopus.Client.Repositories.Async.IGetList<TeamResource>
   {
   }
   interface ITenantRepository
     Octopus.Client.Repositories.Async.ICreate<TenantResource>
     Octopus.Client.Repositories.Async.IModify<TenantResource>
     Octopus.Client.Repositories.Async.IGet<TenantResource>
+    Octopus.Client.Repositories.Async.IGetList<TenantResource>
     Octopus.Client.Repositories.Async.IDelete<TenantResource>
     Octopus.Client.Repositories.Async.IFindByName<TenantResource>
     Octopus.Client.Repositories.Async.IPaginate<TenantResource>
@@ -4760,6 +4818,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.IModify<UserResource>
     Octopus.Client.Repositories.Async.IDelete<UserResource>
     Octopus.Client.Repositories.Async.ICreate<UserResource>
+    Octopus.Client.Repositories.Async.IGetList<UserResource>
   {
     Task<UserResource> Create(String, String, String, String)
     Task<ApiKeyResource> CreateApiKey(Octopus.Client.Model.UserResource, String)
@@ -4782,6 +4841,7 @@ Octopus.Client.Repositories.Async
     Octopus.Client.Repositories.Async.ICreate<UserRoleResource>
     Octopus.Client.Repositories.Async.IModify<UserRoleResource>
     Octopus.Client.Repositories.Async.IDelete<UserRoleResource>
+    Octopus.Client.Repositories.Async.IGetList<UserRoleResource>
   {
   }
   interface IVariableSetRepository
