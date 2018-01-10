@@ -5,12 +5,6 @@ namespace Octopus.Client.Repositories
 {
     public interface IEventRepository : IGet<EventResource>
     {
-        [Obsolete("This method was deprecated in Octopus 3.4.  Please use the other List method by providing named arguments.")]
-        ResourceCollection<EventResource> List(int skip = 0, 
-            string filterByUserId = null,
-            string regardingDocumentId = null,
-            bool includeInternalEvents = false);
-
         /// <summary>
         /// 
         /// </summary>
@@ -58,21 +52,6 @@ namespace Octopus.Client.Repositories
         public EventRepository(IOctopusClient client)
             : base(client, "Events")
         {
-        }
-
-        [Obsolete("This method was deprecated in Octopus 3.4.  Please use the other List method by providing named arguments.")]
-        public ResourceCollection<EventResource> List(int skip = 0, 
-            string filterByUserId = null,
-            string regardingDocumentId = null,
-            bool includeInternalEvents = false)
-        {
-            return Client.List<EventResource>(Client.RootDocument.Link("Events"), new
-            {
-                skip,
-                user = filterByUserId,
-                regarding = regardingDocumentId,
-                @internal = includeInternalEvents.ToString()
-            });
         }
 
         public ResourceCollection<EventResource> List(int skip = 0, 
