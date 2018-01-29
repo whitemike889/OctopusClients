@@ -1231,7 +1231,6 @@ Octopus.Client.Model
     String Description { get; set; }
     String Name { get; set; }
     IList<ActionTemplateParameterResource> Parameters { get; }
-    IDictionary<String, PropertyValueResource> Properties { get; }
     IList<CompositeActionTemplateItemResource> TemplateItems { get; set; }
     Int32 Version { get; set; }
   }

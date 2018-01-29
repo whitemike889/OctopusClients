@@ -30,12 +30,6 @@ namespace Octopus.Client.Model
             get { return parameters; }
         }
 
-        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Reuse)]
-        public IDictionary<string, PropertyValueResource> Properties
-        {
-            get { return properties; }
-        }
-
         public CompositeActionTemplateResource()
         {
             TemplateItems = new List<CompositeActionTemplateItemResource>();
