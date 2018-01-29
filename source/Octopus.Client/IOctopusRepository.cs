@@ -58,6 +58,7 @@ namespace Octopus.Client
         IProjectTriggerRepository ProjectTriggers { get; }
         IRetentionPolicyRepository RetentionPolicies { get; }
         IConfigurationRepository Configuration { get; }
+        ICompositeActionTemplateRepository CompositeActionTemplates { get; }
     }
 }
 #endif

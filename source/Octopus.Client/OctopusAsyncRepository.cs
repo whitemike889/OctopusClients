@@ -71,6 +71,7 @@ namespace Octopus.Client
             TagSets = new TagSetRepository(client);
             BuiltInPackageRepository = new BuiltInPackageRepositoryRepository(client);
             Configuration = new ConfigurationRepository(client);
+            CompositeActionTemplates = new CompositeActionTemplateRepository(client);
         }
 
         public IOctopusAsyncClient Client { get; }
@@ -158,5 +159,7 @@ namespace Octopus.Client
         public ITagSetRepository TagSets { get; }
 
         public ITenantRepository Tenants { get; }
+
+        public ICompositeActionTemplateRepository CompositeActionTemplates { get; }
     }
 }

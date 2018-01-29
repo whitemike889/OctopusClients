@@ -57,6 +57,7 @@ Octopus.Client
     Octopus.Client.Repositories.Async.IChannelRepository Channels { get; }
     Octopus.Client.IOctopusAsyncClient Client { get; }
     Octopus.Client.Repositories.Async.ICommunityActionTemplateRepository CommunityActionTemplates { get; }
+    Octopus.Client.Repositories.Async.ICompositeActionTemplateRepository CompositeActionTemplates { get; }
     Octopus.Client.Repositories.Async.IConfigurationRepository Configuration { get; }
     Octopus.Client.Repositories.Async.IDashboardConfigurationRepository DashboardConfigurations { get; }
     Octopus.Client.Repositories.Async.IDashboardRepository Dashboards { get; }
@@ -132,6 +133,7 @@ Octopus.Client
     Octopus.Client.Repositories.IChannelRepository Channels { get; }
     Octopus.Client.IOctopusClient Client { get; }
     Octopus.Client.Repositories.ICommunityActionTemplateRepository CommunityActionTemplates { get; }
+    Octopus.Client.Repositories.ICompositeActionTemplateRepository CompositeActionTemplates { get; }
     Octopus.Client.Repositories.IConfigurationRepository Configuration { get; }
     Octopus.Client.Repositories.IDashboardConfigurationRepository DashboardConfigurations { get; }
     Octopus.Client.Repositories.IDashboardRepository Dashboards { get; }
@@ -210,6 +212,7 @@ Octopus.Client
     Octopus.Client.Repositories.Async.IChannelRepository Channels { get; }
     Octopus.Client.IOctopusAsyncClient Client { get; }
     Octopus.Client.Repositories.Async.ICommunityActionTemplateRepository CommunityActionTemplates { get; }
+    Octopus.Client.Repositories.Async.ICompositeActionTemplateRepository CompositeActionTemplates { get; }
     Octopus.Client.Repositories.Async.IConfigurationRepository Configuration { get; }
     Octopus.Client.Repositories.Async.IDashboardConfigurationRepository DashboardConfigurations { get; }
     Octopus.Client.Repositories.Async.IDashboardRepository Dashboards { get; }
@@ -305,6 +308,7 @@ Octopus.Client
     Octopus.Client.Repositories.IChannelRepository Channels { get; }
     Octopus.Client.IOctopusClient Client { get; }
     Octopus.Client.Repositories.ICommunityActionTemplateRepository CommunityActionTemplates { get; }
+    Octopus.Client.Repositories.ICompositeActionTemplateRepository CompositeActionTemplates { get; }
     Octopus.Client.Repositories.IConfigurationRepository Configuration { get; }
     Octopus.Client.Repositories.IDashboardConfigurationRepository DashboardConfigurations { get; }
     Octopus.Client.Repositories.IDashboardRepository Dashboards { get; }
@@ -1595,6 +1599,49 @@ Octopus.Client.Model
     .ctor()
     Boolean Equals(Octopus.Client.Model.UserPermissionRestriction, Octopus.Client.Model.UserPermissionRestriction)
     Int32 GetHashCode(Octopus.Client.Model.UserPermissionRestriction)
+  }
+  class CompositeActionsUpdateResource
+  {
+    .ctor()
+  }
+  class CompositeActionTemplateItemResource
+    Octopus.Client.Extensibility.IResource
+    Octopus.Client.Model.IAuditedResource
+    Octopus.Client.Extensibility.INamedResource
+    Octopus.Client.Model.Resource
+  {
+    .ctor()
+    String ActionTemplateId { get; set; }
+    String ActionType { get; set; }
+    String CommunityActionTemplateId { get; set; }
+    String CompositeActionTemplateId { get; set; }
+    String Description { get; set; }
+    String Name { get; set; }
+    IList<ActionTemplateParameterResource> Parameters { get; }
+    IDictionary<String, PropertyValueResource> Properties { get; }
+    Int32 Version { get; set; }
+  }
+  class CompositeActionTemplateResource
+    Octopus.Client.Extensibility.IResource
+    Octopus.Client.Model.IAuditedResource
+    Octopus.Client.Extensibility.INamedResource
+    Octopus.Client.Model.Resource
+  {
+    .ctor()
+    String Description { get; set; }
+    String Name { get; set; }
+    IList<ActionTemplateParameterResource> Parameters { get; }
+    IDictionary<String, PropertyValueResource> Properties { get; }
+    IList<CompositeActionTemplateItemResource> TemplateItems { get; set; }
+    Int32 Version { get; set; }
+  }
+  class CompositeActionTemplateSearchResource
+  {
+    .ctor()
+  }
+  class CompositeActionUpdateResultResource
+  {
+    .ctor()
   }
   class ConfigurationItemResource
     Octopus.Client.Extensibility.IResource
@@ -4256,6 +4303,20 @@ Octopus.Client.Repositories
     void Install(Octopus.Client.Model.CommunityActionTemplateResource)
     void UpdateInstallation(Octopus.Client.Model.CommunityActionTemplateResource)
   }
+  interface ICompositeActionTemplateRepository
+    Octopus.Client.Repositories.ICreate<CompositeActionTemplateResource>
+    Octopus.Client.Repositories.IModify<CompositeActionTemplateResource>
+    Octopus.Client.Repositories.IDelete<CompositeActionTemplateResource>
+    Octopus.Client.Repositories.IGet<CompositeActionTemplateResource>
+    Octopus.Client.Repositories.IFindByName<CompositeActionTemplateResource>
+    Octopus.Client.Repositories.IPaginate<CompositeActionTemplateResource>
+    Octopus.Client.Repositories.IGetAll<CompositeActionTemplateResource>
+  {
+    Octopus.Client.Model.CompositeActionTemplateResource GetVersion(Octopus.Client.Model.CompositeActionTemplateResource, Int32)
+    List<CompositeActionTemplateSearchResource> Search()
+    void SetLogo(Octopus.Client.Model.CompositeActionTemplateResource, String, Stream)
+    Octopus.Client.Model.CompositeActionUpdateResultResource[] UpdateActions(Octopus.Client.Model.CompositeActionTemplateResource, Octopus.Client.Model.CompositeActionsUpdateResource)
+  }
   interface IConfigurationRepository
   {
     Octopus.Client.Repositories.T Get()
@@ -4710,6 +4771,20 @@ Octopus.Client.Repositories.Async
     Task<ActionTemplateResource> GetInstalledTemplate(Octopus.Client.Model.CommunityActionTemplateResource)
     Task Install(Octopus.Client.Model.CommunityActionTemplateResource)
     Task UpdateInstallation(Octopus.Client.Model.CommunityActionTemplateResource)
+  }
+  interface ICompositeActionTemplateRepository
+    Octopus.Client.Repositories.Async.ICreate<CompositeActionTemplateResource>
+    Octopus.Client.Repositories.Async.IModify<CompositeActionTemplateResource>
+    Octopus.Client.Repositories.Async.IDelete<CompositeActionTemplateResource>
+    Octopus.Client.Repositories.Async.IGet<CompositeActionTemplateResource>
+    Octopus.Client.Repositories.Async.IFindByName<CompositeActionTemplateResource>
+    Octopus.Client.Repositories.Async.IPaginate<CompositeActionTemplateResource>
+    Octopus.Client.Repositories.Async.IGetAll<CompositeActionTemplateResource>
+  {
+    Task<CompositeActionTemplateResource> GetVersion(Octopus.Client.Model.CompositeActionTemplateResource, Int32)
+    Task<List<CompositeActionTemplateSearchResource>> Search()
+    Task SetLogo(Octopus.Client.Model.CompositeActionTemplateResource, String, Stream)
+    Task<CompositeActionUpdateResultResource[]> UpdateActions(Octopus.Client.Model.CompositeActionTemplateResource, Octopus.Client.Model.CompositeActionsUpdateResource)
   }
   interface IConfigurationRepository
   {

@@ -58,5 +58,6 @@ namespace Octopus.Client
         IOctopusServerNodeRepository OctopusServerNodes { get; }
 
         IConfigurationRepository Configuration { get; }
+        ICompositeActionTemplateRepository CompositeActionTemplates { get; }
     }
 }

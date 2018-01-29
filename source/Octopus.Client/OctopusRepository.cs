@@ -65,6 +65,7 @@ namespace Octopus.Client
             ActionTemplates = new ActionTemplateRepository(client);
             CommunityActionTemplates = new CommunityActionTemplateRepository(client);
             Configuration = new ConfigurationRepository(client);
+            CompositeActionTemplates = new CompositeActionTemplateRepository(client);
         }
 
         public IOctopusClient Client { get; }
@@ -152,6 +153,8 @@ namespace Octopus.Client
         public ITenantRepository Tenants { get; }
 
         public IConfigurationRepository Configuration { get; }
+
+        public ICompositeActionTemplateRepository CompositeActionTemplates { get; }
     }
 }
 #endif
