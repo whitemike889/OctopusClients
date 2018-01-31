@@ -1089,6 +1089,15 @@ Octopus.Client.Model
     Boolean IsControlType(String)
     Boolean IsSensitive()
   }
+  class ActionTemplateParametersMappingResource
+    Octopus.Client.Extensibility.IResource
+    Octopus.Client.Model.IAuditedResource
+    Octopus.Client.Model.Resource
+  {
+    .ctor()
+    Octopus.Client.Model.ActionTemplateParameterResource From { get; }
+    Octopus.Client.Model.ActionTemplateParameterResource To { get; }
+  }
   class ActionTemplateResource
     Octopus.Client.Extensibility.IResource
     Octopus.Client.Model.IAuditedResource
@@ -1607,18 +1616,12 @@ Octopus.Client.Model
   class CompositeActionTemplateItemResource
     Octopus.Client.Extensibility.IResource
     Octopus.Client.Model.IAuditedResource
-    Octopus.Client.Extensibility.INamedResource
     Octopus.Client.Model.Resource
   {
     .ctor()
     String ActionTemplateId { get; set; }
-    String ActionType { get; set; }
     String CommunityActionTemplateId { get; set; }
     String CompositeActionTemplateId { get; set; }
-    String Description { get; set; }
-    String Name { get; set; }
-    IList<ActionTemplateParameterResource> Parameters { get; }
-    IDictionary<String, PropertyValueResource> Properties { get; }
     Int32 Version { get; set; }
   }
   class CompositeActionTemplateResource
@@ -1630,6 +1633,7 @@ Octopus.Client.Model
     .ctor()
     String Description { get; set; }
     String Name { get; set; }
+    IList<ActionTemplateParametersMappingResource> ParameterMappings { get; }
     IList<ActionTemplateParameterResource> Parameters { get; }
     IList<CompositeActionTemplateItemResource> TemplateItems { get; set; }
     Int32 Version { get; set; }
