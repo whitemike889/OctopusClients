@@ -10,7 +10,7 @@ namespace Octopus.Client.Model
     public class CompositeActionTemplateResource : Resource, INamedResource
     {
         readonly IList<ActionTemplateParameterResource> parameters = new List<ActionTemplateParameterResource>();
-        readonly IList<ActionTemplateParametersMappingResource> parameterMappings = new List<ActionTemplateParametersMappingResource>();
+        readonly IList<CompositeActionTemplateItemResource> templateItems = new List<CompositeActionTemplateItemResource>();
 
         [Required(ErrorMessage = "Please provide a name for the template.")]
         [Writeable]
@@ -22,18 +22,10 @@ namespace Octopus.Client.Model
         public int Version { get; set; }
 
         [Writeable]
-        public IList<CompositeActionTemplateItemResource> TemplateItems { get; set; }
+        public IList<CompositeActionTemplateItemResource> TemplateItems => templateItems;
 
         [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Reuse)]
-        public IList<ActionTemplateParameterResource> Parameters
-        {
-            get { return parameters; }
-        }
-        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Reuse)]
-        public IList<ActionTemplateParametersMappingResource> ParameterMappings => parameterMappings;
-        public CompositeActionTemplateResource()
-        {
-            TemplateItems = new List<CompositeActionTemplateItemResource>();
-        }
+        public IList<ActionTemplateParameterResource> Parameters => parameters;
+
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace Octopus.Client.Model
 {
-    public class ActionTemplateParametersMappingResource : Resource
+    public class ActionTemplateParametersMappingResource
     {
-        public ActionTemplateParameterResource From { get; }
-        public ActionTemplateParameterResource To { get; }
+        public string FromParameterId { get; set; }
+        public string ToParameterId { get; set; }
     }
 }
