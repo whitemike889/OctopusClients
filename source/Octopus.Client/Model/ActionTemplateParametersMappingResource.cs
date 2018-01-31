@@ -2,7 +2,7 @@
 {
     public class ActionTemplateParametersMappingResource
     {
-        public string FromParameterId { get; set; }
+        public string FromParameterName { get; set; }
         public string ToParameterId { get; set; }
     }
 }

@@ -1092,7 +1092,7 @@ Octopus.Client.Model
   class ActionTemplateParametersMappingResource
   {
     .ctor()
-    String FromParameterId { get; set; }
+    String FromParameterName { get; set; }
     String ToParameterId { get; set; }
   }
   class ActionTemplateResource
@@ -1619,7 +1619,7 @@ Octopus.Client.Model
     String ActionTemplateId { get; set; }
     String CommunityActionTemplateId { get; set; }
     String CompositeActionTemplateId { get; set; }
-    IList<ActionTemplateParametersMappingResource> ParameterMappings { get; }
+    IList<ActionTemplateParametersMappingResource> ParameterMappings { get; set; }
     Int32 Version { get; set; }
   }
   class CompositeActionTemplateResource

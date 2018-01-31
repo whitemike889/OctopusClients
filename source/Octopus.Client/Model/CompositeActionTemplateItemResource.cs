@@ -1,16 +1,25 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Octopus.Client.Extensibility.Attributes;
 
 namespace Octopus.Client.Model
 {
     public class CompositeActionTemplateItemResource : Resource
     {
-        readonly IList<ActionTemplateParametersMappingResource> parameterMappings = new List<ActionTemplateParametersMappingResource>();
         public int Version { get; set; }
+        [WriteableOnCreate]
         public string CommunityActionTemplateId { get; set; }
+        [WriteableOnCreate]
         public string ActionTemplateId { get; set; }
+        [WriteableOnCreate]
         public string CompositeActionTemplateId { get; set; }
-        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Reuse)]
-        public IList<ActionTemplateParametersMappingResource> ParameterMappings => parameterMappings;
+
+        [Writeable]
+        public IList<ActionTemplateParametersMappingResource> ParameterMappings { get; set; }
+
+        public CompositeActionTemplateItemResource()
+        {
+            ParameterMappings = new List<ActionTemplateParametersMappingResource>();
+        }
     }
 }
