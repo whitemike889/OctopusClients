@@ -12,7 +12,7 @@ namespace Octopus.Client.Model.Migrations
         [Writeable]
         public string Password { get; set; }
         [Writeable]
-        public List<string> Projects { get; set; }
+        public List<string> ProjectNames { get; set; }
         [Writeable]
         public bool IgnoreCertificates { get; set; }
         [Writeable]

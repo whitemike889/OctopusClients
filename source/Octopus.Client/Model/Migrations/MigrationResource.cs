@@ -14,7 +14,7 @@ namespace Octopus.Client.Model.Migrations
         public string PackageId { get; set; }
         public string PackageVersion { get; set; }
         public string Password { get; set; }
-        public List<string> Projects { get; set; }
+        public List<string> ProjectNames { get; set; }
         public bool IgnoreCertificates { get; set; }
         public bool IgnoreMachines { get; set; }
         public bool IgnoreDeployments { get; set; }

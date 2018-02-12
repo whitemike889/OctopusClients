@@ -137,14 +137,14 @@ namespace Octopus.Client.Repositories.Async
         {
             // Validation
             // Note: We're not using a validator because this Resource has no corresponding IDocument/DB model.
-            if (!migrationResource.Projects.Any())
-                throw new ArgumentException($"Missing expected '{nameof(migrationResource.Projects)}' parameter.");
+            if (!migrationResource.ProjectNames.Any())
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.ProjectNames)}' parameter.");
             if (string.IsNullOrEmpty(migrationResource.Password))
                 throw new ArgumentException($"Missing expected '{nameof(migrationResource.Password)}' parameter.");
 
             var resource = new TaskResource();
             resource.Name = BuiltInTasks.MigrationPartialExport.Name;
-            resource.Description = description ?? $"Run migration (export) for projects: {string.Join(", ", migrationResource.Projects)}";
+            resource.Description = description ?? $"Run migration (export) for projects: {string.Join(", ", migrationResource.ProjectNames)}";
             resource.Arguments = new Dictionary<string, object>
             {
                 {BuiltInTasks.MigrationPartialExport.Arguments.Migration, migrationResource},
@@ -179,18 +179,14 @@ namespace Octopus.Client.Repositories.Async
         {
             // Validation
             // Note: We're not using a validator because this Resource has no corresponding IDocument/DB model.
-            if (!migrationResource.Projects.Any())
-                throw new ArgumentException($"Missing expected '{nameof(migrationResource.Projects)}' parameter.");
-            if (string.IsNullOrEmpty(migrationResource.PackageId))
-                throw new ArgumentException($"Missing expected '{nameof(migrationResource.PackageId)}' parameter.");
-            if (string.IsNullOrEmpty(migrationResource.PackageVersion))
-                throw new ArgumentException($"Missing expected '{nameof(migrationResource.PackageVersion)}' parameter.");
+            if (!migrationResource.ProjectNames.Any())
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.ProjectNames)}' parameter.");
             if (string.IsNullOrEmpty(migrationResource.Password))
                 throw new ArgumentException($"Missing expected '{nameof(migrationResource.Password)}' parameter.");
 
             var resource = new TaskResource();
             resource.Name = BuiltInTasks.Migration.Name;
-            resource.Description = description ?? $"Run migration (export and import) for projects: {string.Join(", ", migrationResource.Projects)}";
+            resource.Description = description ?? $"Run migration (export and import) for projects: {string.Join(", ", migrationResource.ProjectNames)}";
             resource.Arguments = new Dictionary<string, object>
             {
                 {BuiltInTasks.Migration.Arguments.Migration, migrationResource},
