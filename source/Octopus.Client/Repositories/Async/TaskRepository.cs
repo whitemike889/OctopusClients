@@ -179,6 +179,14 @@ namespace Octopus.Client.Repositories.Async
         {
             // Validation
             // Note: We're not using a validator because this Resource has no corresponding IDocument/DB model.
+            if (!IsValidUri(migrationResource.SourceServerUri))
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.SourceServerUri)}' parameter.");
+            if (string.IsNullOrEmpty(migrationResource.SourceApiKey))
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.SourceApiKey)}' parameter.");
+            if (!IsValidUri(migrationResource.DestinationServerUri))
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.DestinationServerUri)}' parameter.");
+            if (string.IsNullOrEmpty(migrationResource.DestinationApiKey))
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.DestinationApiKey)}' parameter.");
             if (!migrationResource.ProjectNames.Any())
                 throw new ArgumentException($"Missing expected '{nameof(migrationResource.ProjectNames)}' parameter.");
             if (string.IsNullOrEmpty(migrationResource.Password))
@@ -193,6 +201,11 @@ namespace Octopus.Client.Repositories.Async
             };
 
             return Create(resource);
+        }
+        
+        private static bool IsValidUri(string value)
+        {
+            return !string.IsNullOrEmpty(value) && Uri.TryCreate(value, UriKind.Absolute, out _);
         }
 
         public Task<TaskDetailsResource> GetDetails(TaskResource resource)

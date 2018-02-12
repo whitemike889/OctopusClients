@@ -164,7 +164,7 @@ namespace Octopus.Client.Repositories
 
             var resource = new TaskResource();
             resource.Name = BuiltInTasks.MigrationImport.Name;
-            resource.Description = description ?? "Run " + $"Run migration (import) for package: {migrationResource.PackageId}.{migrationResource.PackageVersion}";
+            resource.Description = description ?? $"Run migration (import) for package: {migrationResource.PackageId}.{migrationResource.PackageVersion}";
             resource.Arguments = new Dictionary<string, object>
             {
                 {BuiltInTasks.MigrationImport.Arguments.Migration, migrationResource},
@@ -177,6 +177,14 @@ namespace Octopus.Client.Repositories
         {
             // Validation
             // Note: We're not using a validator because this Resource has no corresponding IDocument/DB model.
+            if (!IsValidUri(migrationResource.SourceServerUri))
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.SourceServerUri)}' parameter.");
+            if (string.IsNullOrEmpty(migrationResource.SourceApiKey))
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.SourceApiKey)}' parameter.");
+            if (!IsValidUri(migrationResource.DestinationServerUri))
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.DestinationServerUri)}' parameter.");
+            if (string.IsNullOrEmpty(migrationResource.DestinationApiKey))
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.DestinationApiKey)}' parameter.");
             if (!migrationResource.ProjectNames.Any())
                 throw new ArgumentException($"Missing expected '{nameof(migrationResource.ProjectNames)}' parameter.");
             if (string.IsNullOrEmpty(migrationResource.Password))
@@ -191,6 +199,11 @@ namespace Octopus.Client.Repositories
             };
 
             return Create(resource);
+        }
+        
+        private static bool IsValidUri(string value)
+        {
+            return !string.IsNullOrEmpty(value) && Uri.TryCreate(value, UriKind.Absolute, out _);
         }
 
         public TaskDetailsResource GetDetails(TaskResource resource)
