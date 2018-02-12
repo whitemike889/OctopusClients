@@ -145,7 +145,7 @@ namespace Octopus.Client.Repositories
             resource.Description = description ?? $"Run migration (export) for projects: {string.Join(", ", migrationResource.Projects)}";
             resource.Arguments = new Dictionary<string, object>
             {
-                {BuiltInTasks.MigrationPartialExport.Arguments.MigrationResource, migrationResource},
+                {BuiltInTasks.MigrationPartialExport.Arguments.Migration, migrationResource},
             };
 
             return Create(resource);
@@ -167,7 +167,7 @@ namespace Octopus.Client.Repositories
             resource.Description = description ?? "Run " + $"Run migration (import) for package: {migrationResource.PackageId}.{migrationResource.PackageVersion}";
             resource.Arguments = new Dictionary<string, object>
             {
-                {BuiltInTasks.MigrationImport.Arguments.MigrationResource, migrationResource},
+                {BuiltInTasks.MigrationImport.Arguments.Migration, migrationResource},
             };
 
             return Create(resource);
@@ -191,7 +191,7 @@ namespace Octopus.Client.Repositories
             resource.Description = description ?? $"Run migration (export and import) for projects: {string.Join(", ", migrationResource.Projects)}";
             resource.Arguments = new Dictionary<string, object>
             {
-                {BuiltInTasks.Migration.Arguments.MigrationResource, migrationResource},
+                {BuiltInTasks.Migration.Arguments.Migration, migrationResource},
             };
 
             return Create(resource);

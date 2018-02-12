@@ -74,7 +74,7 @@ namespace Octopus.Client.Model
 
             public static class Arguments
             {
-                public const string MigrationResource = "MigrationResource";
+                public const string Migration = "Migration";
             }
         }
 
@@ -84,7 +84,7 @@ namespace Octopus.Client.Model
 
             public static class Arguments
             {
-                public const string MigrationResource = "MigrationResource";
+                public const string Migration = "Migration";
             }
         }
 
@@ -94,7 +94,7 @@ namespace Octopus.Client.Model
 
             public static class Arguments
             {
-                public const string MigrationResource = "MigrationResource";
+                public const string Migration = "Migration";
             }
         }
 

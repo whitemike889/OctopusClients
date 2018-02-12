@@ -868,15 +868,15 @@ Octopus.Client.Model
   }
   abstract class Arguments
   {
-    static System.String MigrationResource
+    static System.String Migration
   }
   abstract class Arguments
   {
-    static System.String MigrationResource
+    static System.String Migration
   }
   abstract class Arguments
   {
-    static System.String MigrationResource
+    static System.String Migration
   }
   abstract class Arguments
   {
@@ -1045,7 +1045,7 @@ Octopus.Client.Model
       static System.String Name
       abstract class Arguments
       {
-        static System.String MigrationResource
+        static System.String Migration
       }
     }
     abstract class MigrationImport
@@ -1053,7 +1053,7 @@ Octopus.Client.Model
       static System.String Name
       abstract class Arguments
       {
-        static System.String MigrationResource
+        static System.String Migration
       }
     }
     abstract class MigrationPartialExport
@@ -1061,7 +1061,7 @@ Octopus.Client.Model
       static System.String Name
       abstract class Arguments
       {
-        static System.String MigrationResource
+        static System.String Migration
       }
     }
     abstract class Retention
@@ -2064,7 +2064,7 @@ Octopus.Client.Model
     static System.String Name
     abstract class Arguments
     {
-      static System.String MigrationResource
+      static System.String Migration
     }
   }
   abstract class MigrationImport
@@ -2072,7 +2072,7 @@ Octopus.Client.Model
     static System.String Name
     abstract class Arguments
     {
-      static System.String MigrationResource
+      static System.String Migration
     }
   }
   abstract class MigrationPartialExport
@@ -2080,7 +2080,7 @@ Octopus.Client.Model
     static System.String Name
     abstract class Arguments
     {
-      static System.String MigrationResource
+      static System.String Migration
     }
   }
   class MissingVariableResource
