@@ -55,7 +55,6 @@ namespace Octopus.Client
             MachinePolicies = new MachinePolicyRepository(client);
             MachineRoles = new MachineRoleRepository(client);
             Machines = new MachineRepository(client);
-            Migrations = new MigrationRepository(client);
             OctopusServerNodes = new OctopusServerNodeRepository(client);
             ProjectGroups = new ProjectGroupRepository(client);
             Projects = new ProjectRepository(client);
@@ -102,7 +101,6 @@ namespace Octopus.Client
         public IMachinePolicyRepository MachinePolicies { get; }
         public IMachineRepository Machines { get; }
         public IMachineRoleRepository MachineRoles { get; }
-        public IMigrationRepository Migrations { get; }
         public IOctopusServerNodeRepository OctopusServerNodes { get; }
         public IProjectGroupRepository ProjectGroups { get; }
         public IProjectRepository Projects { get; }

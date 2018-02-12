@@ -41,7 +41,6 @@ namespace Octopus.Client
         IMachinePolicyRepository MachinePolicies { get; }
         IMachineRepository Machines { get; }
         IMachineRoleRepository MachineRoles { get; }
-        IMigrationRepository Migrations { get; }
         IOctopusServerNodeRepository OctopusServerNodes { get; }
         IProjectGroupRepository ProjectGroups { get; }
         IProjectRepository Projects { get; }

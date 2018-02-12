@@ -71,16 +71,31 @@ namespace Octopus.Client.Model
         public static class Migration
         {
             public const string Name = "Migration";
+
+            public static class Arguments
+            {
+                public const string MigrationResource = "MigrationResource";
+            }
         }
 
         public static class MigrationPartialExport
         {
             public const string Name = "MigrationPartialExport";
+
+            public static class Arguments
+            {
+                public const string MigrationResource = "MigrationResource";
+            }
         }
 
         public static class MigrationImport
         {
             public const string Name = "MigrationImport";
+
+            public static class Arguments
+            {
+                public const string MigrationResource = "MigrationResource";
+            }
         }
 
         public static class Retention

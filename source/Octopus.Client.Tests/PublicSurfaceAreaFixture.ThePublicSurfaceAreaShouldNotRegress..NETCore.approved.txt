@@ -66,7 +66,6 @@ Octopus.Client
     Octopus.Client.Repositories.Async.IMachinePolicyRepository MachinePolicies { get; }
     Octopus.Client.Repositories.Async.IMachineRoleRepository MachineRoles { get; }
     Octopus.Client.Repositories.Async.IMachineRepository Machines { get; }
-    Octopus.Client.Repositories.Async.IMigrationRepository Migrations { get; }
     Octopus.Client.Repositories.Async.IOctopusServerNodeRepository OctopusServerNodes { get; }
     Octopus.Client.Repositories.Async.IProjectGroupRepository ProjectGroups { get; }
     Octopus.Client.Repositories.Async.IProjectRepository Projects { get; }
@@ -149,7 +148,6 @@ Octopus.Client
     Octopus.Client.Repositories.Async.IMachinePolicyRepository MachinePolicies { get; }
     Octopus.Client.Repositories.Async.IMachineRoleRepository MachineRoles { get; }
     Octopus.Client.Repositories.Async.IMachineRepository Machines { get; }
-    Octopus.Client.Repositories.Async.IMigrationRepository Migrations { get; }
     Octopus.Client.Repositories.Async.IOctopusServerNodeRepository OctopusServerNodes { get; }
     Octopus.Client.Repositories.Async.IProjectGroupRepository ProjectGroups { get; }
     Octopus.Client.Repositories.Async.IProjectRepository Projects { get; }
@@ -870,6 +868,18 @@ Octopus.Client.Model
   }
   abstract class Arguments
   {
+    static System.String MigrationResource
+  }
+  abstract class Arguments
+  {
+    static System.String MigrationResource
+  }
+  abstract class Arguments
+  {
+    static System.String MigrationResource
+  }
+  abstract class Arguments
+  {
     static System.String EnvironmentId
     static System.String MachineIds
   }
@@ -1033,14 +1043,26 @@ Octopus.Client.Model
     abstract class Migration
     {
       static System.String Name
+      abstract class Arguments
+      {
+        static System.String MigrationResource
+      }
     }
     abstract class MigrationImport
     {
       static System.String Name
+      abstract class Arguments
+      {
+        static System.String MigrationResource
+      }
     }
     abstract class MigrationPartialExport
     {
       static System.String Name
+      abstract class Arguments
+      {
+        static System.String MigrationResource
+      }
     }
     abstract class Retention
     {
@@ -2040,14 +2062,26 @@ Octopus.Client.Model
   abstract class Migration
   {
     static System.String Name
+    abstract class Arguments
+    {
+      static System.String MigrationResource
+    }
   }
   abstract class MigrationImport
   {
     static System.String Name
+    abstract class Arguments
+    {
+      static System.String MigrationResource
+    }
   }
   abstract class MigrationPartialExport
   {
     static System.String Name
+    abstract class Arguments
+    {
+      static System.String MigrationResource
+    }
   }
   class MissingVariableResource
   {
@@ -3695,6 +3729,41 @@ Octopus.Client.Model.Migrations
     String SuccessCallbackUri { get; set; }
     String TaskId { get; set; }
   }
+  class MigrationResource
+    Octopus.Client.Extensibility.IResource
+    Octopus.Client.Model.IAuditedResource
+    Octopus.Client.Model.Resource
+  {
+    .ctor()
+    String DestinationApiKey { get; set; }
+    String DestinationServerUri { get; set; }
+    String DestinationTaskId { get; set; }
+    Boolean IgnoreCertificates { get; set; }
+    Boolean IgnoreDeployments { get; set; }
+    Boolean IgnoreMachines { get; set; }
+    Boolean IgnoreTenants { get; set; }
+    Boolean IncludeTaskLogs { get; set; }
+    Boolean IsDryRun { get; set; }
+    String PackageId { get; set; }
+    String PackageVersion { get; set; }
+    String Password { get; set; }
+    List<String> Projects { get; set; }
+    String SourceApiKey { get; set; }
+    String SourceServerUri { get; set; }
+    String SourceTaskId { get; set; }
+    Octopus.Client.Model.Migrations.MigrationStatus Status { get; set; }
+  }
+  MigrationStatus
+  {
+      Unknown = 0
+      ExportStarted = 1
+      ExportSucceeded = 2
+      ExportFailed = 3
+      ImportStarted = 4
+      ImportSucceeded = 5
+      ImportFailed = 6
+      Complete = 7
+  }
 }
 Octopus.Client.Model.Triggers
 {
@@ -4103,11 +4172,6 @@ Octopus.Client.Repositories.Async
   {
     Task<List<String>> GetAllRoleNames()
   }
-  interface IMigrationRepository
-  {
-    Task<MigrationImportResource> Import(Octopus.Client.Model.Migrations.MigrationImportResource)
-    Task<MigrationPartialExportResource> PartialExport(Octopus.Client.Model.Migrations.MigrationPartialExportResource)
-  }
   interface IModify`1
   {
     Task<TResource> Modify(Octopus.Client.Repositories.Async.TResource)
@@ -4244,6 +4308,9 @@ Octopus.Client.Repositories.Async
     Task<TaskResource> ExecuteCalamariUpdate(String, String[])
     Task<TaskResource> ExecuteCommunityActionTemplatesSynchronisation(String)
     Task<TaskResource> ExecuteHealthCheck(String, Int32, Int32, String, String[])
+    Task<TaskResource> ExecuteMigration(Octopus.Client.Model.Migrations.MigrationResource, String)
+    Task<TaskResource> ExecuteMigrationImport(Octopus.Client.Model.Migrations.MigrationImportResource, String)
+    Task<TaskResource> ExecuteMigrationPartialExport(Octopus.Client.Model.Migrations.MigrationPartialExportResource, String)
     Task<TaskResource> ExecuteTentacleUpgrade(String, String, String[])
     Task<List<TaskResource>> GetAllActive(Int32)
     Task<TaskDetailsResource> GetDetails(Octopus.Client.Model.TaskResource)

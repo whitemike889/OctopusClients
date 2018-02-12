@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Octopus.Client.Model;
+using Octopus.Client.Model.Migrations;
 
 namespace Octopus.Client.Repositories.Async
 {
@@ -18,6 +19,9 @@ namespace Octopus.Client.Repositories.Async
         Task<TaskDetailsResource> GetDetails(TaskResource resource);
         Task<TaskResource> ExecuteActionTemplate(ActionTemplateResource resource, Dictionary<string, PropertyValueResource> properties, string[] machineIds = null, string[] environmentIds = null, string[] targetRoles = null, string description = null);
         Task<TaskResource> ExecuteCommunityActionTemplatesSynchronisation(string description = null);
+        Task<TaskResource> ExecuteMigrationPartialExport(MigrationPartialExportResource resource, string description = null);
+        Task<TaskResource> ExecuteMigrationImport(MigrationImportResource resource, string description = null);
+        Task<TaskResource> ExecuteMigration(MigrationResource resource, string description = null);
         Task<List<TaskResource>> GetAllActive(int pageSize = int.MaxValue);
         Task<string> GetRawOutputLog(TaskResource resource);
         Task Rerun(TaskResource resource);
@@ -125,6 +129,72 @@ namespace Octopus.Client.Repositories.Async
             var resource = new TaskResource();
             resource.Name = BuiltInTasks.SyncCommunityActionTemplates.Name;
             resource.Description = description ?? "Run " + BuiltInTasks.SyncCommunityActionTemplates.Name;
+
+            return Create(resource);
+        }
+
+        public Task<TaskResource> ExecuteMigrationPartialExport(MigrationPartialExportResource migrationResource, string description = null)
+        {
+            // Validation
+            // Note: We're not using a validator because this Resource has no corresponding IDocument/DB model.
+            if (!migrationResource.Projects.Any())
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.Projects)}' parameter.");
+            if (string.IsNullOrEmpty(migrationResource.Password))
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.Password)}' parameter.");
+
+            var resource = new TaskResource();
+            resource.Name = BuiltInTasks.MigrationPartialExport.Name;
+            resource.Description = description ?? $"Run migration (export) for projects: {string.Join(", ", migrationResource.Projects)}";
+            resource.Arguments = new Dictionary<string, object>
+            {
+                {BuiltInTasks.MigrationPartialExport.Arguments.MigrationResource, migrationResource},
+            };
+
+            return Create(resource);
+        }
+
+        public Task<TaskResource> ExecuteMigrationImport(MigrationImportResource migrationResource, string description = null)
+        {
+            // Validation
+            // Note: We're not using a validator because this Resource has no corresponding IDocument/DB model.
+            if (string.IsNullOrEmpty(migrationResource.PackageId))
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.PackageId)}' parameter.");
+            if (string.IsNullOrEmpty(migrationResource.PackageVersion))
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.PackageVersion)}' parameter.");
+            if (string.IsNullOrEmpty(migrationResource.Password))
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.Password)}' parameter.");
+
+            var resource = new TaskResource();
+            resource.Name = BuiltInTasks.MigrationImport.Name;
+            resource.Description = description ?? $"Run migration (import) for package: {migrationResource.PackageId}.{migrationResource.PackageVersion}";
+            resource.Arguments = new Dictionary<string, object>
+            {
+                {BuiltInTasks.MigrationImport.Arguments.MigrationResource, migrationResource},
+            };
+
+            return Create(resource);
+        }
+
+        public Task<TaskResource> ExecuteMigration(MigrationResource migrationResource, string description = null)
+        {
+            // Validation
+            // Note: We're not using a validator because this Resource has no corresponding IDocument/DB model.
+            if (!migrationResource.Projects.Any())
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.Projects)}' parameter.");
+            if (string.IsNullOrEmpty(migrationResource.PackageId))
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.PackageId)}' parameter.");
+            if (string.IsNullOrEmpty(migrationResource.PackageVersion))
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.PackageVersion)}' parameter.");
+            if (string.IsNullOrEmpty(migrationResource.Password))
+                throw new ArgumentException($"Missing expected '{nameof(migrationResource.Password)}' parameter.");
+
+            var resource = new TaskResource();
+            resource.Name = BuiltInTasks.Migration.Name;
+            resource.Description = description ?? $"Run migration (export and import) for projects: {string.Join(", ", migrationResource.Projects)}";
+            resource.Arguments = new Dictionary<string, object>
+            {
+                {BuiltInTasks.Migration.Arguments.MigrationResource, migrationResource},
+            };
 
             return Create(resource);
         }
