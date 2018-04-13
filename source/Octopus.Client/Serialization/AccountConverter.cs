@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Octopus.Client.Model;
 using Octopus.Client.Model.Accounts;
 
 namespace Octopus.Client.Serialization

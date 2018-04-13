@@ -4540,6 +4540,11 @@ Octopus.Client.Serialization
   {
     .ctor()
   }
+  class ActionTemplateConverter
+    Octopus.Client.Serialization.InheritedClassConverter<ActionTemplateBaseResource, ActionTemplateType>
+  {
+    .ctor()
+  }
   class EndpointConverter
     Octopus.Client.Serialization.InheritedClassConverter<EndpointResource, CommunicationStyle>
   {
