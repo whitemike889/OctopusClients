@@ -5,15 +5,15 @@ using Octopus.Client.Model;
 
 namespace Octopus.Client.Repositories
 {
-    public interface IActionTemplateRepository : ICreate<ActionTemplateResource>, IModify<ActionTemplateResource>, IDelete<ActionTemplateResource>, IGet<ActionTemplateResource>, IFindByName<ActionTemplateResource>, IGetAll<ActionTemplateResource>
+    public interface IActionTemplateRepository : ICreate<ActionTemplateBaseResource>, IModify<ActionTemplateBaseResource>, IDelete<ActionTemplateBaseResource>, IGet<ActionTemplateBaseResource>, IFindByName<ActionTemplateBaseResource>, IGetAll<ActionTemplateBaseResource>
     {
         List<ActionTemplateSearchResource> Search();
-        ActionTemplateResource GetVersion(ActionTemplateResource resource, int version);
-        ActionUpdateResultResource[] UpdateActions(ActionTemplateResource actionTemplate, ActionsUpdateResource update);
-        void SetLogo(ActionTemplateResource resource, string fileName, Stream contents);
+        ActionTemplateBaseResource GetVersion(ActionTemplateBaseResource resource, int version);
+        ActionUpdateResultResource[] UpdateActions(ActionTemplateBaseResource actionTemplate, ActionsUpdateResource update);
+        void SetLogo(ActionTemplateBaseResource resource, string fileName, Stream contents);
     }
 
-    class ActionTemplateRepository : BasicRepository<ActionTemplateResource>, IActionTemplateRepository
+    class ActionTemplateRepository : BasicRepository<ActionTemplateBaseResource>, IActionTemplateRepository
     {
         public ActionTemplateRepository(IOctopusClient client) : base(client, "ActionTemplates")
         {
@@ -24,17 +24,17 @@ namespace Octopus.Client.Repositories
             return Client.Get<List<ActionTemplateSearchResource>>(Client.RootDocument.Link("ActionTemplatesSearch"));
         }
 
-        public ActionTemplateResource GetVersion(ActionTemplateResource resource, int version)
+        public ActionTemplateBaseResource GetVersion(ActionTemplateBaseResource resource, int version)
         {
-            return Client.Get<ActionTemplateResource>(resource.Links["Versions"], new {version});
+            return Client.Get<ActionTemplateBaseResource>(resource.Links["Versions"], new {version});
         }
 
-        public ActionUpdateResultResource[] UpdateActions(ActionTemplateResource actionTemplate, ActionsUpdateResource update)
+        public ActionUpdateResultResource[] UpdateActions(ActionTemplateBaseResource actionTemplate, ActionsUpdateResource update)
         {
             return Client.Post<ActionsUpdateResource, ActionUpdateResultResource[]>(actionTemplate.Links["ActionsUpdate"], update, new { actionTemplate.Id });
         }
 
-        public void SetLogo(ActionTemplateResource resource, string fileName, Stream contents)
+        public void SetLogo(ActionTemplateBaseResource resource, string fileName, Stream contents)
         {
             Client.Post(resource.Link("Logo"), new FileUpload { Contents = contents, FileName = fileName }, false);
         }

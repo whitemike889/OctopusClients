@@ -5,15 +5,15 @@ using Octopus.Client.Model;
 
 namespace Octopus.Client.Repositories.Async
 {
-    public interface IActionTemplateRepository : ICreate<ActionTemplateResource>, IModify<ActionTemplateResource>, IDelete<ActionTemplateResource>, IGet<ActionTemplateResource>, IFindByName<ActionTemplateResource>, IGetAll<ActionTemplateResource>
+    public interface IActionTemplateRepository : ICreate<ActionTemplateBaseResource>, IModify<ActionTemplateBaseResource>, IDelete<ActionTemplateBaseResource>, IGet<ActionTemplateBaseResource>, IFindByName<ActionTemplateBaseResource>, IGetAll<ActionTemplateBaseResource>
     {
         Task<List<ActionTemplateSearchResource>> Search();
-        Task<ActionTemplateResource> GetVersion(ActionTemplateResource resource, int version);
-        Task<ActionUpdateResultResource[]> UpdateActions(ActionTemplateResource actionTemplate, ActionsUpdateResource update);
-        Task SetLogo(ActionTemplateResource resource, string fileName, Stream contents);
+        Task<ActionTemplateBaseResource> GetVersion(ActionTemplateBaseResource resource, int version);
+        Task<ActionUpdateResultResource[]> UpdateActions(ActionTemplateBaseResource actionTemplate, ActionsUpdateResource update);
+        Task SetLogo(ActionTemplateBaseResource resource, string fileName, Stream contents);
     }
 
-    class ActionTemplateRepository : BasicRepository<ActionTemplateResource>, IActionTemplateRepository
+    class ActionTemplateRepository : BasicRepository<ActionTemplateBaseResource>, IActionTemplateRepository
     {
         public ActionTemplateRepository(IOctopusAsyncClient client) : base(client, "ActionTemplates")
         {
@@ -24,16 +24,16 @@ namespace Octopus.Client.Repositories.Async
             return Client.Get<List<ActionTemplateSearchResource>>(Client.RootDocument.Link("ActionTemplatesSearch"));
         }
 
-        public Task<ActionTemplateResource> GetVersion(ActionTemplateResource resource, int version)
+        public Task<ActionTemplateBaseResource> GetVersion(ActionTemplateBaseResource resource, int version)
         {
-            return Client.Get<ActionTemplateResource>(resource.Links["Versions"], new { version });
+            return Client.Get<ActionTemplateBaseResource>(resource.Links["Versions"], new { version });
         }
 
-        public Task<ActionUpdateResultResource[]> UpdateActions(ActionTemplateResource actionTemplate, ActionsUpdateResource update)
+        public Task<ActionUpdateResultResource[]> UpdateActions(ActionTemplateBaseResource actionTemplate, ActionsUpdateResource update)
         {
             return Client.Post<ActionsUpdateResource, ActionUpdateResultResource[]>(actionTemplate.Links["ActionsUpdate"], update, new { actionTemplate.Id });
         }
-        public Task SetLogo(ActionTemplateResource resource, string fileName, Stream contents)
+        public Task SetLogo(ActionTemplateBaseResource resource, string fileName, Stream contents)
         {
             return Client.Post(resource.Link("Logo"), new FileUpload { Contents = contents, FileName = fileName }, false);
         }

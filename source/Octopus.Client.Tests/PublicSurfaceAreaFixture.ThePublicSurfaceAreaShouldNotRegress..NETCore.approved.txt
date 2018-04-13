@@ -4079,18 +4079,18 @@ Octopus.Client.Repositories.Async
   {
   }
   interface IActionTemplateRepository
-    Octopus.Client.Repositories.Async.ICreate<ActionTemplateResource>
-    Octopus.Client.Repositories.Async.IModify<ActionTemplateResource>
-    Octopus.Client.Repositories.Async.IDelete<ActionTemplateResource>
-    Octopus.Client.Repositories.Async.IGet<ActionTemplateResource>
-    Octopus.Client.Repositories.Async.IFindByName<ActionTemplateResource>
-    Octopus.Client.Repositories.Async.IPaginate<ActionTemplateResource>
-    Octopus.Client.Repositories.Async.IGetAll<ActionTemplateResource>
+    Octopus.Client.Repositories.Async.ICreate<ActionTemplateBaseResource>
+    Octopus.Client.Repositories.Async.IModify<ActionTemplateBaseResource>
+    Octopus.Client.Repositories.Async.IDelete<ActionTemplateBaseResource>
+    Octopus.Client.Repositories.Async.IGet<ActionTemplateBaseResource>
+    Octopus.Client.Repositories.Async.IFindByName<ActionTemplateBaseResource>
+    Octopus.Client.Repositories.Async.IPaginate<ActionTemplateBaseResource>
+    Octopus.Client.Repositories.Async.IGetAll<ActionTemplateBaseResource>
   {
-    Task<ActionTemplateResource> GetVersion(Octopus.Client.Model.ActionTemplateResource, Int32)
+    Task<ActionTemplateBaseResource> GetVersion(Octopus.Client.Model.ActionTemplateBaseResource, Int32)
     Task<List<ActionTemplateSearchResource>> Search()
-    Task SetLogo(Octopus.Client.Model.ActionTemplateResource, String, Stream)
-    Task<ActionUpdateResultResource[]> UpdateActions(Octopus.Client.Model.ActionTemplateResource, Octopus.Client.Model.ActionsUpdateResource)
+    Task SetLogo(Octopus.Client.Model.ActionTemplateBaseResource, String, Stream)
+    Task<ActionUpdateResultResource[]> UpdateActions(Octopus.Client.Model.ActionTemplateBaseResource, Octopus.Client.Model.ActionsUpdateResource)
   }
   interface IArtifactRepository
     Octopus.Client.Repositories.Async.IPaginate<ArtifactResource>

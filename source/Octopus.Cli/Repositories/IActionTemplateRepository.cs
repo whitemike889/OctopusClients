@@ -5,10 +5,10 @@ namespace Octopus.Cli.Repositories
 {
     public interface IActionTemplateRepository
     {
-        Task<ActionTemplateResource> Get(string idOrHref);
-        Task<ActionTemplateResource> Create(ActionTemplateResource resource);
-        Task<ActionTemplateResource> Modify(ActionTemplateResource resource);
+        Task<ActionTemplateBaseResource> Get(string idOrHref);
+        Task<ActionTemplateBaseResource> Create(ActionTemplateBaseResource resource);
+        Task<ActionTemplateBaseResource> Modify(ActionTemplateBaseResource resource);
 
-        Task<ActionTemplateResource> FindByName(string name);
+        Task<ActionTemplateBaseResource> FindByName(string name);
     }
 }

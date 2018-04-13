@@ -16,31 +16,31 @@ namespace Octopus.Cli.Repositories
             
         }
 
-        public async Task<ActionTemplateResource> Get(string idOrHref)
+        public async Task<ActionTemplateBaseResource> Get(string idOrHref)
         {
             if (string.IsNullOrWhiteSpace(idOrHref)) return null;
             var templatesPath = client.RootDocument.Link("ActionTemplates");
-            return await client.Get<ActionTemplateResource>(templatesPath, new { id = idOrHref }).ConfigureAwait(false);
+            return await client.Get<ActionTemplateBaseResource>(templatesPath, new { id = idOrHref }).ConfigureAwait(false);
         }
 
-        public async Task<ActionTemplateResource> Create(ActionTemplateResource resource)
+        public async Task<ActionTemplateBaseResource> Create(ActionTemplateBaseResource resource)
         {
             var templatesPath = client.RootDocument.Link("ActionTemplates");
             return await client.Create(templatesPath, resource).ConfigureAwait(false);
         }
 
-        public Task<ActionTemplateResource> Modify(ActionTemplateResource resource)
+        public Task<ActionTemplateBaseResource> Modify(ActionTemplateBaseResource resource)
         {
             return client.Update(resource.Links["Self"], resource);
         }
 
-        public async Task<ActionTemplateResource> FindByName(string name)
+        public async Task<ActionTemplateBaseResource> FindByName(string name)
         {
-            ActionTemplateResource template = null;
+            ActionTemplateBaseResource template = null;
 
             name = (name ?? string.Empty).Trim();
             var templatesPath = client.RootDocument.Link("ActionTemplates");
-            await client.Paginate<ActionTemplateResource>(templatesPath, page =>
+            await client.Paginate<ActionTemplateBaseResource>(templatesPath, page =>
             {
                 template = page.Items.FirstOrDefault(t => string.Equals((t.Name ?? string.Empty), name, StringComparison.OrdinalIgnoreCase));
                 // If no matching template was found, then we need to try the next page.

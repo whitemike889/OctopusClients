@@ -35,7 +35,7 @@ namespace Octopus.Cli.Importers
             public IDictionary<string, EnvironmentResource> Environments { get; set; }
             public IDictionary<string, MachineResource> Machines { get; set; }
             public IDictionary<string, FeedResource> Feeds { get; set; }
-            public IDictionary<string, ActionTemplateResource> Templates { get; set; }
+            public IDictionary<string, ActionTemplateBaseResource> Templates { get; set; }
             public VariableSetResource VariableSet { get; set; }
             public IEnumerable<ChannelResource> Channels { get; set; }
             public IDictionary<string, LifecycleResource> ChannelLifecycles { get; set; }
@@ -417,7 +417,7 @@ namespace Octopus.Cli.Importers
             ProjectResource importedProject,
             IDictionary<string, EnvironmentResource> environments,
             IDictionary<string, FeedResource> nugetFeeds,
-            IDictionary<string, ActionTemplateResource> actionTemplates)
+            IDictionary<string, ActionTemplateBaseResource> actionTemplates)
         {
             Log.Debug("Importing the Projects Deployment Process");
             var existingDeploymentProcess = await Repository.DeploymentProcesses.Get(importedProject.DeploymentProcessId).ConfigureAwait(false);
@@ -588,10 +588,10 @@ namespace Octopus.Cli.Importers
             return dependencies;
         }
 
-        protected async Task<CheckedReferences<ActionTemplateResource>> CheckActionTemplates(List<ReferenceDataItem> actionTemplates)
+        protected async Task<CheckedReferences<ActionTemplateBaseResource>> CheckActionTemplates(List<ReferenceDataItem> actionTemplates)
         {
             Log.Debug("Checking that all Action Templates exist");
-            var dependencies = new CheckedReferences<ActionTemplateResource>();
+            var dependencies = new CheckedReferences<ActionTemplateBaseResource>();
             foreach (var actionTemplate in actionTemplates)
             {
                 var template = await actionTemplateRepository.FindByName(actionTemplate.Name).ConfigureAwait(false);
