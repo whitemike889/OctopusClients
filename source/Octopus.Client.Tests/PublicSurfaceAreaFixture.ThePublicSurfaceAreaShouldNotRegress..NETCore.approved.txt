@@ -684,6 +684,27 @@ Octopus.Client.Model
     IDictionary<String, PropertyValueResource> Overrides { get; set; }
     Int32 Version { get; set; }
   }
+  abstract class ActionTemplateBaseResource
+    Octopus.Client.Extensibility.IResource
+    Octopus.Client.Model.IAuditedResource
+    Octopus.Client.Extensibility.INamedResource
+    Octopus.Client.Model.Resource
+  {
+    .ctor()
+    Octopus.Client.Model.ActionTemplateType ActionTemplateType { get; set; }
+    String Description { get; set; }
+    String Name { get; set; }
+    IList<ActionTemplateParameterResource> Parameters { get; set; }
+    IDictionary<String, PropertyValueResource> Properties { get; set; }
+    Int32 Version { get; set; }
+  }
+  class ActionTemplateChildResource
+    Octopus.Client.Model.CompositeActionTemplateChildResource
+  {
+    .ctor()
+    String ActionTemplateId { get; set; }
+    Int32 Version { get; set; }
+  }
   class ActionTemplateParameterResource
   {
     .ctor()
@@ -702,16 +723,11 @@ Octopus.Client.Model
     Octopus.Client.Extensibility.IResource
     Octopus.Client.Model.IAuditedResource
     Octopus.Client.Extensibility.INamedResource
-    Octopus.Client.Model.Resource
+    Octopus.Client.Model.ActionTemplateBaseResource
   {
     .ctor()
     String ActionType { get; set; }
     String CommunityActionTemplateId { get; set; }
-    String Description { get; set; }
-    String Name { get; set; }
-    IList<ActionTemplateParameterResource> Parameters { get; }
-    IDictionary<String, PropertyValueResource> Properties { get; }
-    Int32 Version { get; set; }
   }
   class ActionTemplateSearchResource
     Octopus.Client.Extensibility.IResource
@@ -728,6 +744,11 @@ Octopus.Client.Model
     String Name { get; set; }
     String Type { get; set; }
     String Website { get; set; }
+  }
+  ActionTemplateType
+  {
+      ActionTemplate = 0
+      CompositeActionTemplate = 1
   }
   class ActionTemplateUsageResource
     Octopus.Client.Extensibility.IResource
@@ -963,6 +984,12 @@ Octopus.Client.Model
     Nullable<DateTimeOffset> NextDue { get; set; }
     Octopus.Client.Model.RetentionPeriod Retention { get; set; }
     Nullable<TimeSpan> StartingFrom { get; set; }
+  }
+  class BuiltinActionTemplateChildResource
+    Octopus.Client.Model.CompositeActionTemplateChildResource
+  {
+    .ctor()
+    String ActionType { get; set; }
   }
   class BuiltInFeedStatsResource
     Octopus.Client.Extensibility.IResource
@@ -1219,6 +1246,31 @@ Octopus.Client.Model
     .ctor()
     Boolean Equals(Octopus.Client.Model.UserPermissionRestriction, Octopus.Client.Model.UserPermissionRestriction)
     Int32 GetHashCode(Octopus.Client.Model.UserPermissionRestriction)
+  }
+  class CompositeActionTemplateChildResource
+  {
+    .ctor()
+    Octopus.Client.Model.CompositeActionTemplateChildType ChildType { get; set; }
+    String Id { get; set; }
+    String Name { get; set; }
+    IDictionary<String, PropertyValueResource> Properties { get; }
+    Octopus.Client.Model.RunConditionOptions RunConditionOption { get; set; }
+    String RunConditionParameterName { get; set; }
+  }
+  CompositeActionTemplateChildType
+  {
+      Builtin = 0
+      ActionTemplate = 1
+      CompositeActionTemplate = 2
+  }
+  class CompositeActionTemplateResource
+    Octopus.Client.Extensibility.IResource
+    Octopus.Client.Model.IAuditedResource
+    Octopus.Client.Extensibility.INamedResource
+    Octopus.Client.Model.ActionTemplateBaseResource
+  {
+    .ctor()
+    IList<CompositeActionTemplateChildResource> Children { get; set; }
   }
   class ConfigurationItemResource
     Octopus.Client.Extensibility.IResource
@@ -2676,6 +2728,11 @@ Octopus.Client.Model
     Guid InstallationId { get; set; }
     Boolean IsEarlyAccessProgram { get; set; }
     String Version { get; set; }
+  }
+  RunConditionOptions
+  {
+      None = 0
+      BoundToParameter = 1
   }
   ScopeField
   {
