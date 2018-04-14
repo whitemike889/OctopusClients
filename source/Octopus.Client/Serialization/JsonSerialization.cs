@@ -26,6 +26,7 @@ namespace Octopus.Client.Serialization
                     new EndpointConverter(),
                     new AccountConverter(),
                     new ActionTemplateConverter(),
+                    new CompositeActionTemplateChildConverter(),
                     new FeedConverter(),
                     new HrefConverter(null),
                     new PropertyValueResource.PropertyValueJsonConverter(),

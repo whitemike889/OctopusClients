@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Octopus.Client.Extensibility;
 using Octopus.Client.Extensibility.Attributes;
 
 namespace Octopus.Client.Model
 {
-    public class CompositeActionTemplateChildResource
+    public class CompositeActionTemplateChildResource : Resource, INamedResource
     {
         IDictionary<string, PropertyValueResource> properties = new Dictionary<string, PropertyValueResource>(StringComparer.OrdinalIgnoreCase);
 
-        public string Id { get; set; }
-        /// <summary>
-        /// The snapshot name of the ActionTemplate
-        /// </summary>
         public string Name { get; set; }
 
         [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Reuse)]

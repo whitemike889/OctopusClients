@@ -18,4 +18,17 @@ namespace Octopus.Client.Serialization
         protected override string TypeDesignatingPropertyName => nameof(ActionTemplateBaseResource.ActionTemplateType);
 
     }
+    public class CompositeActionTemplateChildConverter : InheritedClassConverter<CompositeActionTemplateChildResource, CompositeActionTemplateChildType>
+    {
+        static readonly IDictionary<CompositeActionTemplateChildType, Type> CompositeActionTemplateChildTypeMappings =
+            new Dictionary<CompositeActionTemplateChildType, Type>
+            {
+                {CompositeActionTemplateChildType.ActionTemplate, typeof(ActionTemplateChildResource)},
+                {CompositeActionTemplateChildType.Builtin, typeof(BuiltinActionTemplateChildResource)},
+            };
+
+        protected override IDictionary<CompositeActionTemplateChildType, Type> DerivedTypeMappings => CompositeActionTemplateChildTypeMappings;
+        protected override string TypeDesignatingPropertyName => nameof(CompositeActionTemplateChildResource.ChildType);
+
+    }
 }
