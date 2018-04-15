@@ -14,6 +14,7 @@ namespace Octopus.Client.Model
         public const string StepName = "StepName";
         public const string AzureAccount = "AzureAccount";
         public const string Certificate = "Certificate";
+        public const string StepRunCondition = "StepRunCondition";
 
         public static Dictionary<string, string> AsDisplaySettings(string controlType)
         {

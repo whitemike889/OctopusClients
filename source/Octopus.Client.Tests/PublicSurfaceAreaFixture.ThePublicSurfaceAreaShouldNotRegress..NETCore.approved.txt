@@ -699,6 +699,9 @@ Octopus.Client.Model
     Int32 Version { get; set; }
   }
   class ActionTemplateChildResource
+    Octopus.Client.Extensibility.IResource
+    Octopus.Client.Model.IAuditedResource
+    Octopus.Client.Extensibility.INamedResource
     Octopus.Client.Model.CompositeActionTemplateChildResource
   {
     .ctor()
@@ -986,6 +989,9 @@ Octopus.Client.Model
     Nullable<TimeSpan> StartingFrom { get; set; }
   }
   class BuiltinActionTemplateChildResource
+    Octopus.Client.Extensibility.IResource
+    Octopus.Client.Model.IAuditedResource
+    Octopus.Client.Extensibility.INamedResource
     Octopus.Client.Model.CompositeActionTemplateChildResource
   {
     .ctor()
@@ -1248,10 +1254,13 @@ Octopus.Client.Model
     Int32 GetHashCode(Octopus.Client.Model.UserPermissionRestriction)
   }
   class CompositeActionTemplateChildResource
+    Octopus.Client.Extensibility.IResource
+    Octopus.Client.Model.IAuditedResource
+    Octopus.Client.Extensibility.INamedResource
+    Octopus.Client.Model.Resource
   {
     .ctor()
     Octopus.Client.Model.CompositeActionTemplateChildType ChildType { get; set; }
-    String Id { get; set; }
     String Name { get; set; }
     IDictionary<String, PropertyValueResource> Properties { get; }
     Octopus.Client.Model.RunConditionOptions RunConditionOption { get; set; }
@@ -1292,6 +1301,7 @@ Octopus.Client.Model
     static System.String Sensitive
     static System.String SingleLineText
     static System.String StepName
+    static System.String StepRunCondition
     static Dictionary<String, String> AsDisplaySettings(String)
   }
   class DashboardConfigurationResource
@@ -4542,6 +4552,11 @@ Octopus.Client.Serialization
   }
   class ActionTemplateConverter
     Octopus.Client.Serialization.InheritedClassConverter<ActionTemplateBaseResource, ActionTemplateType>
+  {
+    .ctor()
+  }
+  class CompositeActionTemplateChildConverter
+    Octopus.Client.Serialization.InheritedClassConverter<CompositeActionTemplateChildResource, CompositeActionTemplateChildType>
   {
     .ctor()
   }
