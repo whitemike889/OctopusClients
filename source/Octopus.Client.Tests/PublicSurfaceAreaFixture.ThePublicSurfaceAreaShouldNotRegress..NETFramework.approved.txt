@@ -1674,7 +1674,6 @@ Octopus.Client.Model
   {
       Builtin = 0
       ActionTemplate = 1
-      CompositeActionTemplate = 2
   }
   class CompositeActionTemplateResource
     Octopus.Client.Extensibility.IResource
