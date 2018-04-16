@@ -9,8 +9,7 @@
     public enum CompositeActionTemplateChildType
     {
         Builtin,
-        ActionTemplate,
-        CompositeActionTemplate
+        ActionTemplate
     }
 
     public enum RunConditionOptions
