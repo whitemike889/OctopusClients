@@ -19,7 +19,7 @@ namespace Octopus.Cli.Commands.Machine
         readonly HashSet<string> healthStatuses = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private HealthStatusProvider provider;
         List<WorkerPoolResource> workerpoolResources;
-        IEnumerable<WorkerResource> workerpoolMachines;
+        IEnumerable<WorkerResource> workerpoolWorkers;
         private bool? isDisabled;
         private bool? isCalamariOutdated;
         private bool? isTentacleOutdated;
@@ -42,18 +42,18 @@ namespace Octopus.Cli.Commands.Machine
 
             workerpoolResources = await GetPools().ConfigureAwait(false);
 
-            workerpoolMachines = await FilterByWorkerPools(workerpoolResources).ConfigureAwait(false);
-            workerpoolMachines = FilterByState(workerpoolMachines, provider);
+            workerpoolWorkers = await FilterByWorkerPools(workerpoolResources).ConfigureAwait(false);
+            workerpoolWorkers = FilterByState(workerpoolWorkers, provider);
         }
 
         public void PrintDefaultOutput()
         {
-            LogFilteredMachines(workerpoolMachines, provider, workerpoolResources);
+            LogFilteredMachines(workerpoolWorkers, provider, workerpoolResources);
         }
 
         public void PrintJsonOutput()
         {
-            commandOutputProvider.Json(workerpoolMachines.Select(machine => new
+            commandOutputProvider.Json(workerpoolWorkers.Select(machine => new
             {
                 machine.Id,
                 machine.Name,
