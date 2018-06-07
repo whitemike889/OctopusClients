@@ -3914,6 +3914,7 @@ Octopus.Client.Model
     Boolean CanPasswordBeEdited { get; set; }
     String DisplayName { get; set; }
     String EmailAddress { get; set; }
+    Boolean HasMultiFactorAuthenticationConfigured { get; set; }
     Octopus.Client.Model.IdentityResource[] Identities { get; set; }
     Boolean IsActive { get; set; }
     Boolean IsRequestor { get; set; }
