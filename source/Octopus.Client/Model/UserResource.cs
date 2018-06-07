@@ -48,7 +48,9 @@ namespace Octopus.Client.Model
         [NotReadable]
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Password { get; set; }
-    
+ 
+        public bool HasMultiFactorAuthenticationConfigured { get; set; }
+
         [Writeable]
         public IdentityResource[] Identities { get; set; }
     }
