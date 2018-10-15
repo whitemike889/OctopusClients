@@ -2899,6 +2899,14 @@ Octopus.Client.Model
     String VariableTemplateId { get; set; }
     String VariableTemplateName { get; set; }
   }
+  MultipleAccountType
+  {
+      None = 0
+      KubernetesStandard = 1
+      KubernetesAws = 2
+      KubernetesAzure = 3
+      KubernetesCertificate = 4
+  }
   class MultiTenancyStatusResource
     Octopus.Client.Extensibility.IResource
     Octopus.Client.Model.IAuditedResource
