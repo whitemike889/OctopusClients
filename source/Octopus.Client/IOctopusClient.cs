@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Octopus.Client.Exceptions;
+using Octopus.Client.Extensibility;
 using Octopus.Client.Model;
 
 namespace Octopus.Client
@@ -12,6 +13,8 @@ namespace Octopus.Client
     /// </summary>
     public interface IOctopusClient : IDisposable
     {
+        IOctopusRepository Repository { get; }
+
         /// <summary>
         /// Gets a document that identifies the Octopus server (from /api) and provides links to the resources available on the
         /// server. Instead of hardcoding paths,
@@ -29,6 +32,7 @@ namespace Octopus.Client
         /// </exception>
         /// <exception cref="OctopusValidationException">HTTP 400: If there was a problem with the request provided by the user.</exception>
         /// <exception cref="OctopusResourceNotFoundException">HTTP 404: If the specified resource does not exist on the server.</exception>
+        [Obsolete("This property is deprecated, please use the one from Repository instead")]
         RootResource RootDocument { get; }
     
         /// <summary>
@@ -322,7 +326,20 @@ namespace Octopus.Client
         /// Requests a fresh root document from the Octopus Server which can be useful if the API surface has changed. This can occur when enabling/disabling features, or changing license.
         /// </summary>
         /// <returns>A fresh copy of the root document.</returns>
+        [Obsolete("This method is deprecated, please use the one from Repository instead")]
         RootResource RefreshRootDocument();
+
+        /// <summary>
+        /// Sign in
+        /// </summary>
+        /// <param name="loginCommand"></param>
+        void SignIn(LoginCommand loginCommand);
+
+        /// <summary>
+        /// Sign out
+        /// </summary>
+        void SignOut();
+        bool IsAuthenticated { get; }
     }
 }
 #endif

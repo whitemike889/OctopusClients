@@ -1,5 +1,8 @@
 using System;
+using System.Linq;
 using Octopus.Client.Model;
+using Octopus.Client.Repositories.Async;
+using Octopus.Client.Util;
 
 namespace Octopus.Client.Repositories
 {
@@ -12,23 +15,26 @@ namespace Octopus.Client.Repositories
     
     class CommunityActionTemplateRepository : BasicRepository<CommunityActionTemplateResource>, ICommunityActionTemplateRepository
     {
-        public CommunityActionTemplateRepository(IOctopusClient client) : base(client, "CommunityActionTemplates")
+        public CommunityActionTemplateRepository(IOctopusRepository repository) : base(repository, "CommunityActionTemplates")
         {
         }
 
         public void Install(CommunityActionTemplateResource resource)
         {
-            Client.Post(resource.Links["Installation"]);
+            Repository.SpaceContext.EnsureSingleSpaceContext();
+            Client.Post(resource.Links["Installation"].AppendSpaceId(Repository.SpaceContext.SpaceIds.Single()));
         }
 
         public void UpdateInstallation(CommunityActionTemplateResource resource)
         {
-            Client.Put(resource.Links["Installation"]);
+            Repository.SpaceContext.EnsureSingleSpaceContext();
+            Client.Put(resource.Links["Installation"].AppendSpaceId(Repository.SpaceContext.SpaceIds.Single()));
         }
 
         public ActionTemplateResource GetInstalledTemplate(CommunityActionTemplateResource resource)
         {
-            return Client.Get<ActionTemplateResource>(resource.Links["InstalledTemplate"]);
+            Repository.SpaceContext.EnsureSingleSpaceContext();
+            return Client.Get<ActionTemplateResource>(resource.Links["InstalledTemplate"].AppendSpaceId(Repository.SpaceContext.SpaceIds.Single()));
         }
     }
 }

@@ -14,6 +14,7 @@ using System.Net.Http.Headers;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Octopus.Client.Extensibility;
 using Octopus.Client.Extensions;
 using Octopus.Client.Logging;
 using Octopus.Client.Util;
@@ -34,12 +35,14 @@ namespace Octopus.Client
         private readonly Uri cookieOriginUri;
         private readonly bool ignoreSslErrors = false;
         bool ignoreSslErrorMessageLogged = false;
+        private OctopusClientOptions clientOptions;
+        private bool signedIn = false;
+        public bool IsAuthenticated => (signedIn || !string.IsNullOrEmpty(this.serverEndpoint.ApiKey));
 
         // Use the Create method to instantiate
         private OctopusAsyncClient(OctopusServerEndpoint serverEndpoint, OctopusClientOptions options, bool addCertificateCallback)
         {
-            options = options ?? new OctopusClientOptions();
-
+            clientOptions = options ?? new OctopusClientOptions();
             this.serverEndpoint = serverEndpoint;
             cookieOriginUri = BuildCookieUri(serverEndpoint);
             var handler = new HttpClientHandler
@@ -48,10 +51,10 @@ namespace Octopus.Client
                 Credentials = serverEndpoint.Credentials ?? CredentialCache.DefaultNetworkCredentials,
             };
 
-            if (options.Proxy != null)
+            if (clientOptions.Proxy != null)
             {
                 handler.UseProxy = true;
-                handler.Proxy = new ClientProxy(options.Proxy, options.ProxyUsername, options.ProxyPassword);
+                handler.Proxy = new ClientProxy(clientOptions.Proxy, clientOptions.ProxyUsername, clientOptions.ProxyPassword);
             }
 
 #if HTTP_CLIENT_SUPPORTS_SSL_OPTIONS
@@ -67,7 +70,7 @@ namespace Octopus.Client
                 handler.Proxy = serverEndpoint.Proxy;
 
             client = new HttpClient(handler, true);
-            client.Timeout = options.Timeout;
+            client.Timeout = clientOptions.Timeout;
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add(ApiConstants.ApiKeyHttpHeaderName, serverEndpoint.ApiKey);
             client.DefaultRequestHeaders.Add("User-Agent", $"{ApiConstants.OctopusUserAgentProductName}/{GetType().GetSemanticVersion().ToNormalizedString()}");
@@ -131,8 +134,7 @@ Certificate thumbprint:   {certificate.Thumbprint}";
             var client = new OctopusAsyncClient(serverEndpoint, options ?? new OctopusClientOptions(), addHandler);
             try
             {
-                client.RootDocument = await client.EstablishSession().ConfigureAwait(false);
-                client.Repository = new OctopusAsyncRepository(client);
+                client.Repository = await OctopusAsyncRepository.Create(client);
                 return client;
             }
             catch
@@ -142,28 +144,40 @@ Certificate thumbprint:   {certificate.Thumbprint}";
             }
         }
 
-        /// <summary>
-        /// Gets a document that identifies the Octopus server (from /api) and provides links to the resources available on the
-        /// server. Instead of hardcoding paths,
-        /// clients should use these link properties to traverse the resources on the server. This document is lazily loaded so
-        /// that it is only requested once for
-        /// the current <see cref="IOctopusAsyncClient" />.
-        /// </summary>
-        public RootResource RootDocument { get; private set; }
+        [Obsolete("This property is deprecated, please use the one from Repository instead")]
+        public RootResource RootDocument => Repository?.RootDocument;
 
         /// <summary>
         /// Indicates whether a secure (SSL) connection is being used to communicate with the server.
         /// </summary>
         public bool IsUsingSecureConnection => serverEndpoint.IsUsingSecureConnection;
 
-        /// <summary>
-        /// Requests a fresh root document from the Octopus Server which can be useful if the API surface has changed. This can occur when enabling/disabling features, or changing license.
-        /// </summary>
-        /// <returns>A fresh copy of the root document.</returns>
+        [Obsolete("This method is deprecated, please use the one from Repository instead")]
         public async Task<RootResource> RefreshRootDocument()
         {
-            RootDocument = await Get<RootResource>("~/api").ConfigureAwait(false);
-            return RootDocument;
+            return await Repository.RefreshRootDocument();
+        }
+
+        protected virtual Task<RootResource> EstablishSession()
+        {
+            return Task.FromResult(Repository.RootDocument);
+        }
+
+        public async Task SignIn(LoginCommand loginCommand)
+        {
+            if (loginCommand.State == null)
+            {
+                loginCommand.State = new LoginState { UsingSecureConnection = IsUsingSecureConnection };
+            }
+            await Post(Repository.Link("SignIn"), loginCommand);
+            signedIn = true;
+            Repository = await OctopusAsyncRepository.Create(this);
+        }
+
+        public async Task SignOut()
+        {
+            await Post(Repository.Link("SignOut"));
+            signedIn = false;
         }
 
         /// <summary>
@@ -454,81 +468,22 @@ Certificate thumbprint:   {certificate.Thumbprint}";
             return serverEndpoint.OctopusServer.Resolve(path);
         }
 
-        protected virtual async Task<RootResource> EstablishSession()
-        {
-            RootResource server;
-
-            var watch = Stopwatch.StartNew();
-            Exception lastError = null;
-
-            // 60 second limit using Stopwatch alone makes debugging impossible.
-            var retries = 3;
-
-            while (true)
-            {
-                if (retries <= 0 && watch.Elapsed > TimeSpan.FromSeconds(60))
-                {
-                    if (lastError == null)
-                    {
-                        throw new Exception("Unable to connect to the Octopus Deploy server.");
-                    }
-
-                    throw new Exception("Unable to connect to the Octopus Deploy server. See the inner exception for details.", lastError);
-                }
-
-                try
-                {
-                    server = await Get<RootResource>("~/api").ConfigureAwait(false);
-                    break;
-                }
-                catch (HttpRequestException ex)
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                    lastError = ex;
-                }
-                catch (OctopusServerException ex)
-                {
-                    if (ex.HttpStatusCode != 503)
-                    {
-                        // 503 means the service is starting, so give it some time to start
-                        throw;
-                    }
-
-                    await Task.Delay(TimeSpan.FromSeconds(0.5));
-                    lastError = ex;
-                }
-                retries--;
-            }
-
-            if (string.IsNullOrWhiteSpace(server.ApiVersion))
-                throw new UnsupportedApiVersionException("This Octopus Deploy server uses an older API specification than this tool can handle. Please check for updates to the Octo tool.");
-
-            var min = SemanticVersion.Parse(ApiConstants.SupportedApiSchemaVersionMin);
-            var max = SemanticVersion.Parse(ApiConstants.SupportedApiSchemaVersionMax);
-            var current = SemanticVersion.Parse(server.ApiVersion);
-
-            if (current < min || current > max)
-                throw new UnsupportedApiVersionException($"This Octopus Deploy server uses a newer API specification ({server.ApiVersion}) than this tool can handle ({ApiConstants.SupportedApiSchemaVersionMin} to {ApiConstants.SupportedApiSchemaVersionMax}). Please check for updates to this tool.");
-
-            return server;
-        }
-
         protected virtual async Task<OctopusResponse<TResponseResource>> DispatchRequest<TResponseResource>(OctopusRequest request, bool readResponse)
         {
             using (var message = new HttpRequestMessage())
             {
                 message.RequestUri = request.Uri;
                 message.Method = new HttpMethod(request.Method);
-                
+
                 if (request.Method == "PUT" || request.Method == "DELETE")
                 {
                     message.Method = HttpMethod.Post;
                     message.Headers.Add("X-HTTP-Method-Override", request.Method);
                 }
 
-                if (RootDocument != null)
+                if (Repository?.RootDocument != null)
                 {
-                    var expectedCookieName = $"{ApiConstants.AntiforgeryTokenCookiePrefix}_{RootDocument.InstallationId}";
+                    var expectedCookieName = $"{ApiConstants.AntiforgeryTokenCookiePrefix}_{Repository.RootDocument.InstallationId}";
                     var antiforgeryCookie = cookieContainer.GetCookies(cookieOriginUri)
                         .Cast<Cookie>()
                         .SingleOrDefault(c => string.Equals(c.Name, expectedCookieName));

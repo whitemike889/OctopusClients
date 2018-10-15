@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Octopus.Client.Model;
+using Octopus.Client.Util;
 
 namespace Octopus.Client.Repositories.Async
 {
-    public interface IEventRepository : IGet<EventResource>
+    public interface IEventRepository : IGet<EventResource>, ICanExtendSpaceContext<IEventRepository>
     {
         [Obsolete("This method was deprecated in Octopus 3.4.  Please use the other List method by providing named arguments.")]
         Task<ResourceCollection<EventResource>> List(int skip = 0, 
@@ -54,10 +56,15 @@ namespace Octopus.Client.Repositories.Async
             string documentTypes = null);
     }
 
-    class EventRepository : BasicRepository<EventResource>, IEventRepository
+    class EventRepository : MixedScopeBaseRepository<EventResource>, IEventRepository
     {
-        public EventRepository(IOctopusAsyncClient client)
-            : base(client, "Events")
+        public EventRepository(IOctopusAsyncRepository repository)
+            : base(repository, "Events")
+        {
+        }
+
+        EventRepository(IOctopusAsyncRepository repository, SpaceContext spaceContext)
+            : base(repository, "Events", spaceContext)
         {
         }
 
@@ -67,13 +74,13 @@ namespace Octopus.Client.Repositories.Async
                 string regardingDocumentId = null,
                 bool includeInternalEvents = false)
         {
-            return Client.List<EventResource>(Client.RootDocument.Link("Events"), new
+            return Client.List<EventResource>(Repository.Link("Events"), ParameterHelper.CombineParameters(AdditionalQueryParameters, new
             {
                 skip,
                 user = filterByUserId,
                 regarding = regardingDocumentId,
                 @internal = includeInternalEvents.ToString()
-            });
+            }));
         }
 
         public Task<ResourceCollection<EventResource>> List(int skip = 0, 
@@ -95,7 +102,7 @@ namespace Octopus.Client.Repositories.Async
             long? toAutoId = null,
             string documentTypes = null)
         {
-            return Client.List<EventResource>(Client.RootDocument.Link("Events"), new
+            var parameters = ParameterHelper.CombineParameters(AdditionalQueryParameters, new
             {
                 skip,
                 take,
@@ -116,6 +123,13 @@ namespace Octopus.Client.Repositories.Async
                 toAutoId,
                 documentTypes
             });
+
+            return Client.List<EventResource>(Repository.Link("Events"), parameters);
+        }
+
+        public IEventRepository Including(SpaceContext spaceContext)
+        {
+            return new EventRepository(Repository, ExtendSpaceContext(spaceContext));
         }
     }
 }

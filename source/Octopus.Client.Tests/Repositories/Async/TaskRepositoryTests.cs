@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
@@ -18,10 +18,11 @@ namespace Octopus.Client.Tests.Repositories.Async
         public void WaitForCompletionReportsProgress_ActionOverload()
         {
             var client = Substitute.For<IOctopusAsyncClient>();
-            var repository = new TaskRepository(client);
+            client.Get<RootResource>(Arg.Any<string>()).Returns(new RootResource(){ApiVersion = "3.0.0"});
+            var repository = new TaskRepository(OctopusAsyncRepository.Create(client, SpaceContext.SpecificSpaceAndSystem("Spaces-1")).Result);
             var taskResource = new TaskResource { Links = new LinkCollection() { { "Self", "" } }, State = TaskState.Queued };
 
-            client.Get<TaskResource>(Arg.Any<string>()).Returns(c => Task.FromResult(taskResource));
+            client.Get<TaskResource>(Arg.Any<string>(), Arg.Any<Dictionary<string, object>>()).Returns(c => Task.FromResult(taskResource));
 
             var callbackCount = 0;
 
@@ -46,10 +47,11 @@ namespace Octopus.Client.Tests.Repositories.Async
         public void WaitForCompletionReportsProgress_TaskOverload()
         {
             var client = Substitute.For<IOctopusAsyncClient>();
-            var repository = new TaskRepository(client);
+            client.Get<RootResource>(Arg.Any<string>()).Returns(new RootResource() { ApiVersion = "3.0.0" });
+            var repository = new TaskRepository(OctopusAsyncRepository.Create(client, SpaceContext.SpecificSpaceAndSystem("Spaces-1")).Result);
             var taskResource = new TaskResource { Links = new LinkCollection() { { "Self", "" } }, State = TaskState.Queued };
 
-            client.Get<TaskResource>(Arg.Any<string>()).Returns(c => Task.FromResult(taskResource));
+            client.Get<TaskResource>(Arg.Any<string>(), Arg.Any<Dictionary<string, object>>()).Returns(c => Task.FromResult(taskResource));
 
             var callbackCount = 0;
 
@@ -73,10 +75,11 @@ namespace Octopus.Client.Tests.Repositories.Async
         public void WaitForCompletion_CancelsInATimelyManner()
         {
             var client = Substitute.For<IOctopusAsyncClient>();
-            var repository = new TaskRepository(client);
+            client.Get<RootResource>(Arg.Any<string>()).Returns(new RootResource() { ApiVersion = "3.0.0" });
+            var repository = new TaskRepository(OctopusAsyncRepository.Create(client, SpaceContext.SpecificSpaceAndSystem("Spaces-1")).Result);
             var taskResource = new TaskResource { Links = new LinkCollection() { { "Self", "" } }, State = TaskState.Queued };
 
-            client.Get<TaskResource>(Arg.Any<string>()).Returns(c => Task.FromResult(taskResource));
+            client.Get<TaskResource>(Arg.Any<string>(), Arg.Any<Dictionary<string, object>>()).Returns(c => Task.FromResult(taskResource));
 
             Action exec = () =>
             {

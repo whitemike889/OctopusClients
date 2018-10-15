@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Octopus.Client.Model;
+using Octopus.Client.Util;
 
 namespace Octopus.Client.Repositories.Async
 {
@@ -12,23 +14,26 @@ namespace Octopus.Client.Repositories.Async
 
     class CommunityActionTemplateRepository : BasicRepository<CommunityActionTemplateResource>, ICommunityActionTemplateRepository
     {
-        public CommunityActionTemplateRepository(IOctopusAsyncClient client) : base(client, "CommunityActionTemplates")
+        public CommunityActionTemplateRepository(IOctopusAsyncRepository repository) : base(repository, "CommunityActionTemplates")
         {
         }
 
         public Task Install(CommunityActionTemplateResource resource)
         {
-            return Client.Post(resource.Links["Installation"]);
+            Repository.SpaceContext.EnsureSingleSpaceContext();
+            return Client.Post(resource.Links["Installation"].AppendSpaceId(Repository.SpaceContext.SpaceIds.Single()));
         }
 
         public Task UpdateInstallation(CommunityActionTemplateResource resource)
         {
-            return Client.Put(resource.Links["Installation"]);
+            Repository.SpaceContext.EnsureSingleSpaceContext();
+            return Client.Put(resource.Links["Installation"].AppendSpaceId(Repository.SpaceContext.SpaceIds.Single()));
         }
 
         public Task<ActionTemplateResource> GetInstalledTemplate(CommunityActionTemplateResource resource)
         {
-            return Client.Get<ActionTemplateResource>(resource.Links["InstalledTemplate"]);
+            Repository.SpaceContext.EnsureSingleSpaceContext();
+            return Client.Get<ActionTemplateResource>(resource.Links["InstalledTemplate"].AppendSpaceId(Repository.SpaceContext.SpaceIds.Single()));
         }
     }
 }

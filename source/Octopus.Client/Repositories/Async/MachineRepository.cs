@@ -47,7 +47,7 @@ namespace Octopus.Client.Repositories.Async
 
     class MachineRepository : BasicRepository<MachineResource>, IMachineRepository
     {
-        public MachineRepository(IOctopusAsyncClient client) : base(client, "Machines")
+        public MachineRepository(IOctopusAsyncRepository repository) : base(repository, "Machines")
         {
         }
 
@@ -59,7 +59,7 @@ namespace Octopus.Client.Repositories.Async
             });
 
         public Task<MachineResource> Discover(DiscoverMachineOptions options)
-            => Client.Get<MachineResource>(Client.RootDocument.Link("DiscoverMachine"), new
+            => Client.Get<MachineResource>(Repository.Link("DiscoverMachine"), new
             {
                 host = options.Host,
                 port = options.Port,
@@ -76,7 +76,7 @@ namespace Octopus.Client.Repositories.Async
         public Task<List<MachineResource>> FindByThumbprint(string thumbprint)
         {
             if (thumbprint == null) throw new ArgumentNullException("thumbprint");
-            return Client.Get<List<MachineResource>>(Client.RootDocument.Link("machines"), new { id = "all", thumbprint });
+            return Client.Get<List<MachineResource>>(Repository.Link("machines"), new { id = IdValueConstant.IdAll, thumbprint });
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace Octopus.Client.Repositories.Async
             string tenantTags = null,
             string environmentIds = null)
         {
-            return Client.List<MachineResource>(Client.RootDocument.Link("Machines"), new
+            return Client.List<MachineResource>(Repository.Link("Machines"), new
             {
                 skip,
                 take,
