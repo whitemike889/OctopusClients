@@ -63,7 +63,7 @@ namespace Octopus.Cli.Commands.Tenant
                     tenant.ProjectEnvironments.Add(project.Id, new ReferenceCollection(environment.Id));
                 }
 
-                Repository.Tenants.Modify(tenant);
+                await Repository.Tenants.Modify(tenant);
             }
             else
             {
