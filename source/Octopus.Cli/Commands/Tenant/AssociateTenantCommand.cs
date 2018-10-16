@@ -35,19 +35,19 @@ namespace Octopus.Cli.Commands.Tenant
                 tenant = await Repository.Tenants.FindByName(TenantName);
                 if (tenant == null)
                 {
-                    throw new CommandException($"Tenant $TenantName was not found");
+                    throw new CommandException($"Tenant {TenantName} was not found");
                 }
 
                 var environment = await Repository.Environments.FindByName(EnvironmentName);
                 if (environment == null)
                 {
-                    throw new CommandException($"Environment $EnvironmentName was not found");
+                    throw new CommandException($"Environment {EnvironmentName} was not found");
                 }
 
                 var project = await Repository.Projects.FindByName(ProjectName);
                 if (project == null)
                 {
-                    throw new CommandException($"Project $ProjectName was not found");
+                    throw new CommandException($"Project {ProjectName} was not found");
                 }
 
                 tenant.ConnectToProjectAndEnvironments(project, environment);

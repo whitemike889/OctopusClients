@@ -36,13 +36,13 @@ namespace Octopus.Cli.Commands.Machine
             environment = await Repository.Environments.FindByName(EnvironmentName);
             if (environment == null)
             {
-                throw new CommandException($"Environment $EnvironmentName was not found");
+                throw new CommandException($"Environment {EnvironmentName} was not found");
             }
 
             machine = await Repository.Machines.FindByName(MachineName);
             if (machine == null)
             {
-                throw new CommandException($"Machine $MachineName was not found");
+                throw new CommandException($"Machine {MachineName} was not found");
             }
 
             machine.EnvironmentIds.Add(environment.Id);
