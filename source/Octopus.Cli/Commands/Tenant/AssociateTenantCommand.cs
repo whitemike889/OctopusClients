@@ -6,12 +6,15 @@ using Octopus.Cli.Infrastructure;
 using Octopus.Cli.Repositories;
 using Octopus.Cli.Util;
 using Octopus.Client;
+using Octopus.Client.Model;
 
 namespace Octopus.Cli.Commands.Tenant
 {
     [Command("associate-tenant", Description = "Associate a tenant with a project and environment")]
     class AssociateTenantCommand : ApiCommand, ISupportFormattedOutput
     {
+        private TenantResource tenant;
+
         public string TenantName { get; set; }
         public string ProjectName { get; set; }
         public string EnvironmentName { get; set; }
@@ -29,7 +32,7 @@ namespace Octopus.Cli.Commands.Tenant
             var features = await Repository.FeaturesConfiguration.GetFeaturesConfiguration();
             if (features.IsMultiTenancyEnabled)
             {
-                var tenant = await Repository.Tenants.FindByName(TenantName);
+                tenant = await Repository.Tenants.FindByName(TenantName);
                 if (tenant == null)
                 {
                     throw new CommandException($"Tenant $TenantName was not found");
@@ -58,12 +61,34 @@ namespace Octopus.Cli.Commands.Tenant
 
         public void PrintDefaultOutput()
         {
-            
+            if (tenant != null)
+            {
+                commandOutputProvider.Information("{Tenant:l} (ID: {Count})", tenant.Name, tenant.Id);
+                foreach (var tenantProjectEnvironment in tenant.ProjectEnvironments)
+                {
+                    commandOutputProvider.Information(" - {Project:l}", tenantProjectEnvironment.Key);
+                    foreach (var s in tenantProjectEnvironment.Value)
+                    {
+                        commandOutputProvider.Information("  - {Environment:l}", s);
+                    }
+                }
+            }
         }
 
         public void PrintJsonOutput()
         {
-            
+            if (tenant != null)
+            {
+                commandOutputProvider.Json(
+                    new
+                    {
+                        tenant.Id,
+                        tenant.Name,
+                        tenant.ProjectEnvironments,
+                        tenant.TenantTags
+                    }
+                );
+            }
         }
     }
 }
