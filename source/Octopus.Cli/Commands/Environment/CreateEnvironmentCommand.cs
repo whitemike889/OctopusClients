@@ -19,10 +19,12 @@ namespace Octopus.Cli.Commands.Environment
             var options = Options.For("Environment creation");
             options.Add("name=", "The name of the environment", v => EnvironmentName = v);
             options.Add("ignoreIfExists", "If the environment already exists, an error will be returned. Set this flag to ignore the error.", v => IgnoreIfExists = true);
+            options.Add("allowDynamicInfrastructure", "Allow this environment to support dynamic infrastructure.", v => AllowDynamic = true);
         }
 
         public string EnvironmentName { get; set; }
         public bool IgnoreIfExists { get; set; }
+        public bool AllowDynamic { get; set; }
 
         public async Task Request()
         {
@@ -33,6 +35,8 @@ namespace Octopus.Cli.Commands.Environment
             {
                 if (IgnoreIfExists)
                 {
+                    env.AllowDynamicInfrastructure = AllowDynamic;
+                    await Repository.Environments.Modify(env);
                     commandOutputProvider.Information("The environment {Environment:l} (ID {Id:l}) already exists", env.Name, env.Id);
                     return;
                 }
@@ -41,7 +45,11 @@ namespace Octopus.Cli.Commands.Environment
             }
 
             commandOutputProvider.Information("Creating environment: {Environment:l}", EnvironmentName);
-            env = await Repository.Environments.Create(new EnvironmentResource {Name = EnvironmentName}).ConfigureAwait(false);
+            env = await Repository.Environments.Create(new EnvironmentResource
+            {
+                Name = EnvironmentName,
+                AllowDynamicInfrastructure = AllowDynamic
+            }).ConfigureAwait(false);
         }
         
         public void PrintDefaultOutput()
