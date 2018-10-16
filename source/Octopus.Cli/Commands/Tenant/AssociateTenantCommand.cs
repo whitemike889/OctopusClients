@@ -21,7 +21,7 @@ namespace Octopus.Cli.Commands.Tenant
 
         public AssociateTenantCommand(IOctopusClientFactory clientFactory, IOctopusAsyncRepositoryFactory repositoryFactory, IOctopusFileSystem fileSystem, ICommandOutputProvider commandOutputProvider) : base(clientFactory, repositoryFactory, fileSystem, commandOutputProvider)
         {
-            var options = Options.For("Deletion");
+            var options = Options.For("Association");
             options.Add("project=", "Name of the project", v => ProjectName = v);
             options.Add("environment=", "Name of the environment.", v => EnvironmentName = v);
             options.Add("tenant=", "Name of the tenant.", v => TenantName = v);
