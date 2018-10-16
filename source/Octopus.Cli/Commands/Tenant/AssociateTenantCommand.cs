@@ -48,6 +48,7 @@ namespace Octopus.Cli.Commands.Tenant
                 }
 
                 tenant.ConnectToProjectAndEnvironments(project, environment);
+                await Repository.Tenants.Modify(tenant);
             }
             else
             {
