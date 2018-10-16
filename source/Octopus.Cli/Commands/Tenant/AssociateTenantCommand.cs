@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Octopus.Cli.Infrastructure;
@@ -50,8 +51,13 @@ namespace Octopus.Cli.Commands.Tenant
                     throw new CommandException($"Project {ProjectName} was not found");
                 }
 
-                tenant.ConnectToProjectAndEnvironments(project, environment);
-                await Repository.Tenants.Modify(tenant);
+                if (tenant.ProjectEnvironments.Where(pe => pe.Key == project.Id)
+                    .SelectMany(pe => pe.Value)
+                    .All(e => e != environment.Id))
+                {
+                    tenant.ConnectToProjectAndEnvironments(project, environment);
+                    await Repository.Tenants.Modify(tenant);
+                }
             }
             else
             {
