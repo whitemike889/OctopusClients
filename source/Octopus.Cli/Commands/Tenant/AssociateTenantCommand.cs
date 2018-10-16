@@ -51,12 +51,16 @@ namespace Octopus.Cli.Commands.Tenant
                     throw new CommandException($"Project {ProjectName} was not found");
                 }
 
-                if (tenant.ProjectEnvironments.Where(pe => pe.Key == project.Id)
-                    .SelectMany(pe => pe.Value)
-                    .All(e => e != environment.Id))
+                if (tenant.ProjectEnvironments.TryGetValue(project.Id, out var projectEnvironment))
                 {
-                    tenant.ConnectToProjectAndEnvironments(project, environment);
-                    await Repository.Tenants.Modify(tenant);
+                    if (!projectEnvironment.Contains(environment.Id))
+                    {
+                        projectEnvironment.Add(environment.Id);
+                    }
+                }
+                else
+                {
+                    tenant.ProjectEnvironments.Add(project.Id, new ReferenceCollection(environment.Id));
                 }
             }
             else
