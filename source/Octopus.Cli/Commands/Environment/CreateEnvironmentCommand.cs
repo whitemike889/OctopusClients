@@ -35,7 +35,8 @@ namespace Octopus.Cli.Commands.Environment
             {
                 if (IgnoreIfExists)
                 {
-                    env.AllowDynamicInfrastructure = AllowDynamic;
+                    // false means keep existing setting
+                    env.AllowDynamicInfrastructure = AllowDynamic || env.AllowDynamicInfrastructure;
                     await Repository.Environments.Modify(env);
                     commandOutputProvider.Information("The environment {Environment:l} (ID {Id:l}) already exists", env.Name, env.Id);
                     return;
