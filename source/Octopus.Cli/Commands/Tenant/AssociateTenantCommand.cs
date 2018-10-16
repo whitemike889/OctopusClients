@@ -10,7 +10,7 @@ using Octopus.Client;
 namespace Octopus.Cli.Commands.Tenant
 {
     [Command("associate-tenant", Description = "Associate a tenant with a project and environment")]
-    class AssociateTenantCommand : ApiCommand
+    class AssociateTenantCommand : ApiCommand, ISupportFormattedOutput
     {
         public string TenantName { get; set; }
         public string ProjectName { get; set; }
@@ -53,6 +53,16 @@ namespace Octopus.Cli.Commands.Tenant
             {
                 throw new CommandException("Multi-Tenancy is not enabled");
             }
+        }
+
+        public void PrintDefaultOutput()
+        {
+            
+        }
+
+        public void PrintJsonOutput()
+        {
+            
         }
     }
 }
