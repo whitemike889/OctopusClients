@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Octopus.Client.Exceptions;
+﻿using System.Threading.Tasks;
 using Octopus.Client.Model;
 using Octopus.Client.Util;
 
@@ -9,9 +6,6 @@ namespace Octopus.Client.Repositories.Async
 {
     public interface ICommunityActionTemplateRepository : IGet<CommunityActionTemplateResource>
     {
-        Task<ActionTemplateResource> GetInstalledTemplate(CommunityActionTemplateResource resource);
-        Task Install(CommunityActionTemplateResource resource);
-        Task UpdateInstallation(CommunityActionTemplateResource resource);
     }
 
     class CommunityActionTemplateRepository : BasicRepository<CommunityActionTemplateResource>, ICommunityActionTemplateRepository
@@ -19,32 +13,49 @@ namespace Octopus.Client.Repositories.Async
         public CommunityActionTemplateRepository(IOctopusAsyncRepository repository) : base(repository, "CommunityActionTemplates")
         {
         }
+    }
+    
+    public interface ICommunityActionTemplateInstallationRepository
+    {
+        Task<ActionTemplateResource> GetInstalledTemplate(CommunityActionTemplateResource resource);
+        Task Install(CommunityActionTemplateResource resource);
+        Task UpdateInstallation(CommunityActionTemplateResource resource);
+    }
+
+    class CommunityActionTemplateInstallationRepository : ICommunityActionTemplateInstallationRepository
+    {
+        private readonly IOctopusAsyncRepository repository;
+
+        public CommunityActionTemplateInstallationRepository(IOctopusAsyncRepository repository)
+        {
+            this.repository = repository;
+        }
 
         public Task Install(CommunityActionTemplateResource resource)
         {
             var baseLink = resource.Links["Installation"];
-            var link = Repository.Scope.Apply(spaceId => baseLink.AppendSpaceId(spaceId),
+            var link = repository.Scope.Apply(spaceId => baseLink.AppendSpaceId(spaceId),
                 () => throw new SpaceScopedOperationInSystemContextException(),
                 () => baseLink.ToString()); // Link without a space id acts on the default space
-            return Client.Post(link);
+            return repository.Client.Post(link);
         }
 
         public Task UpdateInstallation(CommunityActionTemplateResource resource)
         {
             var baseLink = resource.Links["Installation"];
-            var link = Repository.Scope.Apply(spaceId => baseLink.AppendSpaceId(spaceId),
+            var link = repository.Scope.Apply(spaceId => baseLink.AppendSpaceId(spaceId),
                 () => throw new SpaceScopedOperationInSystemContextException(),
                 () => baseLink.ToString()); // Link without a space id acts on the default space
-            return Client.Put(link);
+            return repository.Client.Put(link);
         }
 
         public Task<ActionTemplateResource> GetInstalledTemplate(CommunityActionTemplateResource resource)
         {
             var baseLink = resource.Links["InstalledTemplate"];
-            var link = Repository.Scope.Apply(spaceId => baseLink.AppendSpaceId(spaceId),
+            var link = repository.Scope.Apply(spaceId => baseLink.AppendSpaceId(spaceId),
                 () => throw new SpaceScopedOperationInSystemContextException(),
                 () => baseLink.ToString()); // Link without a space id acts on the default space
-            return Client.Get<ActionTemplateResource>(link);
+            return repository.Client.Get<ActionTemplateResource>(link);
         }
     }
 }

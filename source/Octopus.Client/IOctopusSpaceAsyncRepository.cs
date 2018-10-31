@@ -12,6 +12,7 @@ namespace Octopus.Client
         IBuiltInPackageRepositoryRepository BuiltInPackageRepository { get; }
         ICertificateRepository Certificates { get; }
         IChannelRepository Channels { get; }
+        ICommunityActionTemplateInstallationRepository CommunityActionTemplateInstallation { get; }
         IDashboardConfigurationRepository DashboardConfigurations { get; }
         IDashboardRepository Dashboards { get; }
         IDefectsRepository Defects { get; }

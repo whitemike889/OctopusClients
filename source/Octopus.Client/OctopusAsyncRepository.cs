@@ -49,6 +49,7 @@ namespace Octopus.Client
             Certificates = new CertificateRepository(this);
             Channels = new ChannelRepository(this);
             CommunityActionTemplates = new CommunityActionTemplateRepository(this);
+            CommunityActionTemplateInstallation = new CommunityActionTemplateInstallationRepository(this);
             Configuration = new ConfigurationRepository(this);
             DashboardConfigurations = new DashboardConfigurationRepository(this);
             Dashboards = new DashboardRepository(this);
@@ -147,6 +148,7 @@ namespace Octopus.Client
         public IWorkerRepository Workers { get; }
         public IScopedUserRoleRepository ScopedUserRoles { get; }
         public IUserPermissionsRepository UserPermissions { get; }
+        public ICommunityActionTemplateInstallationRepository CommunityActionTemplateInstallation { get; }
 
         public async Task<bool> HasLink(string name)
         {
