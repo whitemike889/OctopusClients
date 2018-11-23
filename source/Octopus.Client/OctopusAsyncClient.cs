@@ -25,7 +25,7 @@ namespace Octopus.Client
     /// </summary>
     public class OctopusAsyncClient : IOctopusAsyncClient
     {
-        private static readonly ILog Logger = LogProvider.For<OctopusAsyncClient>();
+        private readonly ILog logger = LogProvider.For<OctopusAsyncClient>();
 
         readonly OctopusServerEndpoint serverEndpoint;
         readonly JsonSerializerSettings defaultJsonSerializerSettings = JsonSerialization.GetDefaultSerializerSettings();
@@ -97,14 +97,14 @@ Certificate thumbprint:   {certificate.Thumbprint}";
             {
                 if (!ignoreSslErrorMessageLogged)
                 {
-                    Logger.Warn(warning);
-                    Logger.Warn("Because IgnoreSslErrors was set, this will be ignored.");
+                    logger.Warn(warning);
+                    logger.Warn("Because IgnoreSslErrors was set, this will be ignored.");
                     ignoreSslErrorMessageLogged = true;
                 }
                 return true;
             }
 
-            Logger.Error(warning);
+            logger.Error(warning);
             return false;
         }
 

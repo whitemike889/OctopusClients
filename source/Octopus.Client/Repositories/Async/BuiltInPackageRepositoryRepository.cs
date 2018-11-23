@@ -24,7 +24,7 @@ namespace Octopus.Client.Repositories.Async
 
     class BuiltInPackageRepositoryRepository : IBuiltInPackageRepositoryRepository
     {
-        private static readonly ILog Logger = LogProvider.For<BuiltInPackageRepositoryRepository>();
+        private readonly ILog logger = LogProvider.For<BuiltInPackageRepositoryRepository>();
 
         readonly IOctopusAsyncClient client;
 
@@ -44,11 +44,11 @@ namespace Octopus.Client.Repositories.Async
             }
             catch(Exception ex) when (!(ex is OctopusValidationException))
             {
-                Logger.Info("Something went wrong while performing a delta transfer: " + ex.Message);
+                logger.Info("Something went wrong while performing a delta transfer: " + ex.Message);
             }
 
             
-            Logger.Info("Falling back to pushing the complete package to the server");
+            logger.Info("Falling back to pushing the complete package to the server");
                 
             contents.Seek(0, SeekOrigin.Begin);
             var result = await client.Post<FileUpload, PackageFromBuiltInFeedResource>(
@@ -56,7 +56,7 @@ namespace Octopus.Client.Repositories.Async
                 new FileUpload() {Contents = contents, FileName = fileName},
                 new {replace = replaceExisting});
                 
-            Logger.Info("Package transfer completed");
+            logger.Info("Package transfer completed");
 
             return result;
         }
@@ -65,25 +65,25 @@ namespace Octopus.Client.Repositories.Async
         {
             if (!client.RootDocument.HasLink("PackageDeltaSignature"))
             {
-                Logger.Info("Server does not support delta compression for package push");
+                logger.Info("Server does not support delta compression for package push");
                 return null;
             }
 
             if (!PackageIdentityParser.TryParsePackageIdAndVersion(Path.GetFileNameWithoutExtension(fileName), out var packageId, out var version))
             {
-                Logger.Info("Could not determine the package ID and/or version based on the supplied filename");
+                logger.Info("Could not determine the package ID and/or version based on the supplied filename");
                 return null;
             }
             
             PackageSignatureResource signatureResult;
             try
             {
-                Logger.Info($"Requesting signature for delta compression from the server for upload of a package with id '{packageId}' and version '{version}'");
+                logger.Info($"Requesting signature for delta compression from the server for upload of a package with id '{packageId}' and version '{version}'");
                 signatureResult = await client.Get<PackageSignatureResource>(client.RootDocument.Link("PackageDeltaSignature"), new {packageId, version});
             }
             catch (OctopusResourceNotFoundException)
             {
-                Logger.Info("No package with the same ID exists on the server");
+                logger.Info("No package with the same ID exists on the server");
                 return null;
             }
                 
@@ -100,7 +100,7 @@ namespace Octopus.Client.Repositories.Async
                         new FileUpload() {Contents = delta, FileName = Path.GetFileName(fileName)},
                         new {replace = replaceExisting, packageId, signatureResult.BaseVersion});
 
-                    Logger.Info($"Delta transfer completed");
+                    logger.Info($"Delta transfer completed");
                     return result;
                 }
             }

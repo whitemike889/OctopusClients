@@ -9,12 +9,10 @@ namespace Octopus.Client.Features
 {
     internal class DeltaCompression
     {
-        private static readonly ILog Logger = LogProvider.For<DeltaCompression>();
-
-
         public static bool CreateDelta(Stream contents, PackageSignatureResource signatureResult, string deltaTempFile)
         {
-            Logger.Info($"Calculating delta");
+            var logger = LogProvider.For<DeltaCompression>();
+            logger.Info($"Calculating delta");
             var deltaBuilder = new DeltaBuilder();
 
             using (var signature = new MemoryStream(signatureResult.Signature))
@@ -33,11 +31,11 @@ namespace Octopus.Client.Features
 
             if (ratio > 0.95)
             {
-                Logger.Info($"The delta file ({deltaFileSize:n0} bytes) is more than 95% the size of the orginal file ({originalFileSize:n0} bytes)");
+                logger.Info($"The delta file ({deltaFileSize:n0} bytes) is more than 95% the size of the orginal file ({originalFileSize:n0} bytes)");
                 return false;
             }
 
-            Logger.Info($"The delta file ({deltaFileSize:n0} bytes) is {ratio:p2} the size of the orginal file ({originalFileSize:n0} bytes), uploading...");
+            logger.Info($"The delta file ({deltaFileSize:n0} bytes) is {ratio:p2} the size of the orginal file ({originalFileSize:n0} bytes), uploading...");
             return true;
         }
     }
