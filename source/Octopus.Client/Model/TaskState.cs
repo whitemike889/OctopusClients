@@ -13,6 +13,8 @@ namespace Octopus.Client.Model
         Canceled = 4,
         TimedOut = 5,
         Success = 6,
-        Cancelling = 8
+        Cancelling = 8,
+        Aborting = 9,
+        Aborted = 10,
     }
 }
