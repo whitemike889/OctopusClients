@@ -3391,6 +3391,8 @@ Octopus.Client.Model
       TimedOut = 5
       Success = 6
       Cancelling = 8
+      Aborting = 9
+      Aborted = 10
   }
   class TeamResource
     Octopus.Client.Extensibility.IResource
