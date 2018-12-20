@@ -277,6 +277,7 @@ Octopus.Client.Editors.Async
     Task<List<ResourceGroup>> ResourceGroups()
     Task<List<AzureStorageAccount>> StorageAccounts()
     Task<List<WebSite>> WebSites()
+    Task<List<WebSlot>> WebSlots(Octopus.Client.Model.Accounts.WebSite)
   }
   class AzureSubscriptionAccountEditor
     Octopus.Client.Editors.Async.IResourceEditor<AzureSubscriptionAccountResource, AzureSubscriptionAccountEditor>
@@ -287,6 +288,9 @@ Octopus.Client.Editors.Async
     Task<List<AzureCloudService>> CloudServices(Octopus.Client.Model.Accounts.AzureSubscriptionAccountResource)
     Task<List<AzureStorageAccount>> StorageAccounts(Octopus.Client.Model.Accounts.AzureSubscriptionAccountResource)
     Task<List<WebSite>> WebSites(Octopus.Client.Model.Accounts.AzureSubscriptionAccountResource)
+    Task<List<WebSite>> WebSites()
+    Task<List<WebSlot>> WebSlots(Octopus.Client.Model.Accounts.AzureSubscriptionAccountResource, Octopus.Client.Model.Accounts.WebSite)
+    Task<List<WebSlot>> WebSlots(Octopus.Client.Model.Accounts.WebSite)
   }
   class CertificateEditor
     Octopus.Client.Editors.Async.IResourceEditor<CertificateResource, CertificateEditor>
@@ -1856,6 +1860,7 @@ Octopus.Client.Model
     String Comments { get; set; }
     String Details { get; set; }
     String IdentityEstablishedWith { get; set; }
+    Boolean IsService { get; set; }
     String Message { get; set; }
     String MessageHtml { get; set; }
     List<EventReference> MessageReferences { get; set; }
@@ -3394,6 +3399,14 @@ Octopus.Client.Model
       Aborting = 9
       Aborted = 10
   }
+  class TaskTypeResource
+    Octopus.Client.Extensibility.IResource
+  {
+    .ctor()
+    String Id { get; set; }
+    Octopus.Client.Extensibility.LinkCollection Links { get; set; }
+    String Name { get; set; }
+  }
   class TeamResource
     Octopus.Client.Extensibility.IResource
     Octopus.Client.Model.IAuditedResource
@@ -3813,8 +3826,17 @@ Octopus.Client.Model.Accounts
     class WebSite
     {
       .ctor()
-      String Name { get; }
+      String Name { get; set; }
       String ResourceGroup { get; set; }
+      String WebSpace { get; set; }
+    }
+    class WebSlot
+    {
+      .ctor()
+      String Name { get; set; }
+      String Region { get; set; }
+      String ResourceGroupName { get; set; }
+      String Site { get; set; }
     }
   }
   class AzureStorageAccount
@@ -3840,9 +3862,17 @@ Octopus.Client.Model.Accounts
     class WebSite
     {
       .ctor()
-      String Name { get; }
+      String Name { get; set; }
       String ResourceGroup { get; set; }
       String WebSpace { get; set; }
+    }
+    class WebSlot
+    {
+      .ctor()
+      String Name { get; set; }
+      String Region { get; set; }
+      String ResourceGroupName { get; set; }
+      String Site { get; set; }
     }
   }
   class ResourceGroup
@@ -3893,15 +3923,32 @@ Octopus.Client.Model.Accounts
   class WebSite
   {
     .ctor()
-    String Name { get; }
+    String Name { get; set; }
     String ResourceGroup { get; set; }
+    String WebSpace { get; set; }
   }
   class WebSite
   {
     .ctor()
-    String Name { get; }
+    String Name { get; set; }
     String ResourceGroup { get; set; }
     String WebSpace { get; set; }
+  }
+  class WebSlot
+  {
+    .ctor()
+    String Name { get; set; }
+    String Region { get; set; }
+    String ResourceGroupName { get; set; }
+    String Site { get; set; }
+  }
+  class WebSlot
+  {
+    .ctor()
+    String Name { get; set; }
+    String Region { get; set; }
+    String ResourceGroupName { get; set; }
+    String Site { get; set; }
   }
 }
 Octopus.Client.Model.Accounts.Usages
@@ -4045,6 +4092,7 @@ Octopus.Client.Model.Endpoints
     String DefaultWorkerPoolId { get; set; }
     String ResourceGroupName { get; set; }
     String WebAppName { get; set; }
+    String WebAppSlotName { get; set; }
   }
   abstract class CalamariDotNetCorePlatforms
   {
@@ -5090,6 +5138,7 @@ Octopus.Client.Repositories.Async
     Task<TaskDetailsResource> GetDetails(Octopus.Client.Model.TaskResource, Nullable<Boolean>, Nullable<Int32>)
     Task<IReadOnlyList<TaskResource>> GetQueuedBehindTasks(Octopus.Client.Model.TaskResource)
     Task<String> GetRawOutputLog(Octopus.Client.Model.TaskResource)
+    Task<TaskTypeResource[]> GetTaskTypes()
     Task ModifyState(Octopus.Client.Model.TaskResource, Octopus.Client.Model.TaskState, String)
     Task Rerun(Octopus.Client.Model.TaskResource)
     Task WaitForCompletion(Octopus.Client.Model.TaskResource, Int32, Int32, Action<TaskResource[]>)
