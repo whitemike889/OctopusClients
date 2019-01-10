@@ -104,7 +104,14 @@ namespace Octopus.Cli.Commands.Deployment
                 var lines = logEntry.MessageText.Split('\n').Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
                 foreach (var line in lines)
                 {
-                    commandOutputProvider.ServiceMessage("message", new { text = line, status = ConvertToTeamCityMessageStatus(logEntry.Category) });
+                    if (line.StartsWith("##teamcity"))
+                    {
+                        commandOutputProvider.Information(line);
+                    }
+                    else
+                    {
+                        commandOutputProvider.ServiceMessage("message", new { text = line, status = ConvertToTeamCityMessageStatus(logEntry.Category) });                        
+                    }
                 }
             }
 
